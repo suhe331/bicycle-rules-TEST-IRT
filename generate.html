@@ -364,7 +364,7 @@ async function generate(){
 - 写真の内容に直接関係する問題にする
 - 小学生でも読める平易な言葉を使う（難しい用語は※で注釈）`;
 
-    const response = await fetch('/api/generate', {
+   const response = await fetch('/api/generate', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
