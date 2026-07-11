@@ -71,7 +71,7 @@ textarea{resize:vertical;line-height:1.6}
 .choice-label{font-size:12px;font-weight:700;min-width:22px;padding-top:9px;color:var(--muted)}
 .choice-input{flex:1;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--rs);font-family:inherit}
 .choice-input.correct-choice{border-color:var(--correct);background:var(--correct-light)}
-.choice-radio{margin-top:10px;flex-shrink:0;width:16px;height:16px;accent-color:var(--correct);cursor:pointer}
+.correct-mark{font-size:11px;font-weight:700;color:var(--correct);white-space:nowrap;padding-top:9px;flex-shrink:0}
 
 .expl-area{display:flex;flex-direction:column;gap:6px}
 .expl-area label{font-size:12px;font-weight:500;color:var(--muted)}
@@ -174,7 +174,7 @@ textarea{resize:vertical;line-height:1.6}
 
     <hr class="divider">
 
-    <div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px">選択肢（正解のラジオボタンを選ぶ）</div>
+    <div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px">選択肢（緑が正解・内容は編集可）</div>
     <div class="choices-edit" id="choices-edit"></div>
 
     <hr class="divider">
@@ -364,7 +364,7 @@ async function generate(){
 - 写真の内容に直接関係する問題にする
 - 小学生でも読める平易な言葉を使う（難しい用語は※で注釈）`;
 
-    const response = await fetch('/api/generate', {
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -420,16 +420,7 @@ function renderResult(d){
   for(let o of sel.options){if(o.value===d.category)o.selected=true;}
 }
 
-function updateChoiceStyle(idx){
-  document.querySelectorAll('.choice-input').forEach((el,i)=>{
-    el.classList.toggle('correct-choice',document.querySelector(`input[name=correct][value="${i}"]`).checked);
-  });
-}
-function updateCorrect(idx){
-  document.querySelectorAll('.choice-input').forEach((el,i)=>{
-    el.classList.toggle('correct-choice',i===idx);
-  });
-}
+
 
 function regenerate(){
   document.getElementById('result-area').style.display='none';
@@ -445,7 +436,7 @@ async function approve(){
 
     // 2. 選択肢・正解を取得
     const choices=Array.from({length:4},(_,i)=>document.getElementById(`choice-${i}`)?.value||'').filter(Boolean);
-    const correctIndex=parseInt(document.querySelector('input[name=correct]:checked')?.value||'0');
+    const correctIndex=parseInt(document.getElementById('choices-edit').dataset.correct||'0');
     const expl=document.getElementById('result-expl').value;
     const law=document.getElementById('result-law').value;
     const cat=document.getElementById('result-cat-select').value;
