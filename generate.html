@@ -382,6 +382,13 @@ async function generate(){
     const clean=text.replace(/```json|```/g,'').trim();
     generatedData=JSON.parse(clean);
 
+    // 選択肢をシャッフルして正解インデックスを更新
+    const choices=generatedData.choices;
+    const correctChoice=choices[generatedData.correct_index];
+    const shuffled=[...choices].sort(()=>Math.random()-0.5);
+    generatedData.choices=shuffled;
+    generatedData.correct_index=shuffled.indexOf(correctChoice);
+
     clearInterval(timer);
     renderResult(generatedData);
   }catch(e){
