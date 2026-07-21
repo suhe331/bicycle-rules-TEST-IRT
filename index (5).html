@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-Poc（ユーポック）｜自分の通学路で学ぶ、自転車安全学習アプリ</title>
+<meta name="description" content="2026年4月の青切符制度に対応。自分の通学路の写真から出題されるから、交通ルールが「自分ごと」になる自転車安全学習アプリ U-Poc。">
+<style>
+:root{
+  --ink:#14171a; --ink-soft:#1c2126; --ink-line:#2a3038;
+  --cream:#f5f3ee; --surface:#fff; --border:#e2ddd5;
+  --text:#1a1a18; --muted:#7a7870; --muted-on-ink:#9a9d9f;
+  --accent:#2563eb; --accent-light:#eff6ff; --accent-dark:#1d4ed8;
+  --line:#f0b429; --line-soft:#3a3220;
+  --correct:#16a34a; --correct-light:#f0fdf4;
+  --warn:#854F0B; --warn-light:#FAEEDA;
+  --r:14px; --rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','BIZ UDPGothic',sans-serif;color:var(--text);background:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased}
+.mono{font-family:'SF Mono','SFMono-Regular','Menlo','Consolas',monospace}
+a{color:inherit}
+img{max-width:100%;display:block}
+.container{max-width:1040px;margin:0 auto;padding:0 24px}
+.container-narrow{max-width:760px;margin:0 auto;padding:0 24px}
+
+/* ---------- header ---------- */
+.site-header{position:sticky;top:0;z-index:50;background:rgba(20,23,26,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--ink-line)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1040px;margin:0 auto}
+.logo{font-size:18px;font-weight:700;letter-spacing:-.5px;color:#fff;text-decoration:none}
+.logo em{color:var(--line);font-style:normal}
+.header-nav{display:none;gap:28px;font-size:13px;color:var(--muted-on-ink)}
+.header-nav a{text-decoration:none}
+.header-nav a:hover{color:#fff}
+@media(min-width:800px){.header-nav{display:flex}}
+.header-cta{display:flex;gap:8px}
+.btn-ghost{font-size:13px;padding:8px 14px;border-radius:20px;border:1px solid var(--ink-line);color:#fff;text-decoration:none;white-space:nowrap}
+.btn-ghost:hover{border-color:var(--line)}
+.btn-solid{font-size:13px;font-weight:600;padding:8px 16px;border-radius:20px;background:var(--line);color:#20200f;text-decoration:none;white-space:nowrap}
+.btn-solid:hover{background:#f7c04d}
+
+/* ---------- hero ---------- */
+.hero{background:var(--ink);color:#fff;padding:64px 0 96px;position:relative;overflow:hidden}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#20200f;background:var(--line);padding:5px 12px;border-radius:20px;margin-bottom:22px}
+.hero-title{font-size:clamp(28px,4.6vw,46px);font-weight:700;letter-spacing:-.02em;line-height:1.35;max-width:760px}
+.hero-title .u{color:var(--line)}
+.hero-sub{margin-top:20px;font-size:15px;color:var(--muted-on-ink);max-width:560px;line-height:1.9}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+.btn-primary{font-size:15px;font-weight:700;padding:13px 24px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--accent-dark)}
+.btn-outline{font-size:15px;font-weight:600;padding:13px 24px;border-radius:10px;border:1px solid #3a4048;color:#fff;text-decoration:none}
+.btn-outline:hover{border-color:var(--line)}
+.hero-stats{display:flex;flex-wrap:wrap;gap:32px;margin-top:56px;padding-top:28px;border-top:1px solid var(--ink-line)}
+.hstat-num{font-family:'SF Mono','SFMono-Regular',monospace;font-size:26px;font-weight:700;color:var(--line)}
+.hstat-lbl{font-size:12px;color:var(--muted-on-ink);margin-top:4px}
+
+/* ---------- route spine ---------- */
+.route{position:relative}
+.route::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background-image:linear-gradient(var(--border) 60%,transparent 0%);background-position:left;background-size:2px 14px;background-repeat:repeat-y}
+@media(min-width:760px){.route::before{left:50%;transform:translateX(-1px)}}
+.waypoint{position:relative;padding:56px 0 56px 64px}
+@media(min-width:760px){.waypoint{padding:72px 0}}
+.marker{position:absolute;left:24px;top:60px;transform:translate(-50%,0);width:44px;height:44px;border-radius:50%;background:var(--cream);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'SF Mono','SFMono-Regular',monospace;font-size:11px;font-weight:700;color:var(--muted)}
+@media(min-width:760px){.marker{left:50%}}
+.waypoint.on .marker{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.wp-content{max-width:1040px;margin:0 auto;padding:0 24px}
+@media(min-width:760px){
+  .wp-content{display:grid;grid-template-columns:1fr 44px 1fr;column-gap:32px;align-items:start}
+  .wp-content .marker{position:static;transform:none !important;grid-column:2;margin:0 auto}
+  .waypoint:nth-child(odd) .wp-body{grid-column:1;grid-row:1;text-align:right}
+  .waypoint:nth-child(even) .wp-body{grid-column:3;grid-row:1}
+}
+.wp-eyebrow{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.03em;margin-bottom:8px}
+.wp-title{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.wp-text{font-size:14.5px;color:var(--muted);line-height:1.9}
+.wp-text b{color:var(--text);font-weight:600}
+.pull-quote{font-size:16px;font-style:italic;color:var(--text);border-left:3px solid var(--line);padding-left:14px;margin:16px 0;line-height:1.8;font-family:'Hiragino Mincho ProN','YuMincho',serif}
+@media(min-width:760px){.waypoint:nth-child(odd) .pull-quote{border-left:none;border-right:3px solid var(--line);padding-left:0;padding-right:14px}}
+
+/* ---------- feature grid ---------- */
+.feature-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+@media(min-width:640px){.feature-grid{grid-template-columns:1fr 1fr}}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;text-align:left}
+.feature-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.feature-icon{font-size:20px}
+.feature-name{font-size:14px;font-weight:700}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.8}
+.badge{font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.badge-live{background:var(--correct-light);color:var(--correct)}
+.badge-soon{background:var(--warn-light);color:var(--warn)}
+
+/* ---------- device mockups ---------- */
+.device{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 20px 40px -20px rgba(20,23,26,.25)}
+.device-bar{background:var(--cream);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;gap:6px}
+.device-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.device-body{padding:16px}
+.mock-qhead{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);margin-bottom:10px}
+.mock-badge{background:var(--accent-light);color:var(--accent);font-weight:700;padding:2px 8px;border-radius:20px;margin-left:auto}
+.mock-q{font-size:13px;font-weight:600;line-height:1.7;margin-bottom:12px}
+.mock-choice{font-size:12px;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mock-choice.correct{border-color:var(--correct);background:var(--correct-light);color:var(--correct);font-weight:600}
+.mock-photo{width:100%;height:90px;border-radius:8px;margin-bottom:10px;background:linear-gradient(135deg,#dfe6f2,#c9d6ea);display:flex;align-items:center;justify-content:center;font-size:11px;color:#5b6b85}
+.mock-score{text-align:center;padding:10px 0}
+.mock-score-num{font-size:34px;font-weight:700;color:var(--accent);letter-spacing:-1px}
+.mock-score-lbl{font-size:11px;color:var(--muted)}
+.mock-rank{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 0;border-top:1px solid var(--border)}
+.mock-rank:first-of-type{border-top:none;margin-top:6px}
+.mock-av{width:20px;height:20px;border-radius:50%;background:#EEEDFE;color:#3C3489;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.screens-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:20px}
+@media(min-width:700px){.screens-grid{grid-template-columns:1fr 1fr}}
+.screen-cap{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* ---------- steps ---------- */
+.steps{display:flex;flex-direction:column;gap:0;margin-top:20px}
+.step{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--border)}
+.step:first-child{border-top:none}
+.step-n{font-family:'SF Mono','SFMono-Regular',monospace;font-size:13px;font-weight:700;color:var(--accent);width:28px;flex-shrink:0;padding-top:2px}
+.step-title{font-size:14.5px;font-weight:700;margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* ---------- adoption cards ---------- */
+.adopt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+@media(min-width:700px){.adopt-grid{grid-template-columns:repeat(3,1fr)}}
+.adopt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.adopt-title{font-size:13.5px;font-weight:700;margin-bottom:6px}
+.adopt-desc{font-size:12.5px;color:var(--muted);line-height:1.8}
+
+/* ---------- contact ---------- */
+.contact-section{background:var(--ink);color:#fff;padding:72px 0}
+.contact-title{font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.01em;margin-bottom:14px}
+.contact-sub{font-size:14px;color:var(--muted-on-ink);max-width:520px;margin-bottom:32px;line-height:1.9}
+.contact-ctas{display:flex;flex-wrap:wrap;gap:12px}
+
+/* ---------- section shell ---------- */
+section{padding:0}
+.section-inner{padding:64px 0}
+.eyebrow{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.03em;margin-bottom:10px}
+.section-title{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+.section-lead{font-size:14.5px;color:var(--muted);max-width:600px;line-height:1.9;margin-bottom:8px}
+
+/* ---------- footer ---------- */
+.site-footer{background:var(--ink);color:var(--muted-on-ink);border-top:1px solid var(--ink-line);padding:28px 0;font-size:12px}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center}
+.footer-links{display:flex;gap:18px}
+.footer-links a{text-decoration:none;color:var(--muted-on-ink)}
+.footer-links a:hover{color:#fff}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo">U<em>-</em>Poc</a>
+    <nav class="header-nav">
+      <a href="#concept">コンセプト</a>
+      <a href="#features">できること</a>
+      <a href="#screens">画面イメージ</a>
+      <a href="#adopt">導入案内</a>
+      <a href="#contact">お問い合わせ</a>
+    </nav>
+    <div class="header-cta">
+      <a href="teacher.html" class="btn-ghost">先生の方はこちら</a>
+      <a href="app.html" class="btn-solid">生徒として始める</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">🚲 2026年4月〜 自転車 青切符制度スタート</div>
+    <h1 class="hero-title">自分の<span class="u">通学路</span>で学ぶから、<br>交通ルールが自分ごとになる。</h1>
+    <p class="hero-sub">U-Poc（ユーポック）は、先生が撮った地元の交差点写真から問題が出題される自転車安全学習アプリです。「あ、ここ知ってる」という実感が、ルールを頭ではなく体に残します。</p>
+    <div class="hero-ctas">
+      <a href="app.html" class="btn-primary">生徒として始める →</a>
+      <a href="teacher.html" class="btn-outline">先生・学校の方はこちら</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hstat-num">100</div><div class="hstat-lbl">収録問題数</div></div>
+      <div><div class="hstat-num">10</div><div class="hstat-lbl">出題カテゴリ</div></div>
+      <div><div class="hstat-num">2,000km</div><div class="hstat-lbl">開発の原点となった無事故走行</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="route">
+
+  <!-- 0km きっかけ -->
+  <div class="waypoint on" id="concept">
+    <div class="wp-content">
+      <div class="marker mono">0km</div>
+      <div class="wp-body">
+        <div class="wp-eyebrow">きっかけ</div>
+        <h2 class="wp-title">「無事故」は、当たり前じゃなかった。</h2>
+        <p class="pull-quote">サイクリング部で2,000kmを走り、無事故でいられた経験が原点。その経験を、すべての若者に届けたい。</p>
+        <p class="wp-text">2026年4月、自転車の交通違反に反則金を科す<b>青切符制度</b>が施行されました。ルールを知らなかったでは済まされない時代に、多くの学校教材は「一般的な交差点」の絵や文章で学ぶものがほとんどです。U-Pocは、その「自分ごと感の薄さ」を変えるところから始まりました。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1km U-Pocとは -->
+  <div class="waypoint">
+    <div class="wp-content">
+      <div class="marker mono">1km</div>
+      <div class="wp-body">
+        <div class="wp-eyebrow">U-Pocとは</div>
+        <h2 class="wp-title">教材の舞台は、生徒が毎日通る道。</h2>
+        <p class="wp-text">先生が地元の交差点や標識をスマホで撮影すると、AIがその写真をもとに問題文・選択肢・解説を自動生成します。生徒が問題を開いたとき目に入るのは、教科書の挿絵ではなく<b>「あ、ここ知ってる」</b>という見覚えのある景色。景色と結びついた記憶は、覚えるためのルールではなく、思い出せるルールになります。</p>
+        <p class="wp-text">出題の難易度は、<b>IRT（項目反応理論）</b>という測定手法で一人ひとりに合わせて自動調整されます。得意な子には少しだけ難しい問題を、まだ自信がない子にはやさしい問題を。ちょうどいい難しさの問題ほど、生徒の理解度を正確に測れるからです。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2km できること -->
+  <div class="waypoint" id="features">
+    <div class="wp-content">
+      <div class="marker mono">2km</div>
+      <div class="wp-body">
+        <div class="wp-eyebrow">できること</div>
+        <h2 class="wp-title">今できること、これから広がること。</h2>
+        <p class="wp-text">現在はテキスト＋写真での出題を中心に、段階的に学び方を広げていく計画です。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-narrow" style="margin-top:-24px;margin-bottom:64px">
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-top"><div class="feature-icon">🎯</div><div class="badge badge-live">現在利用可能</div></div>
+      <div class="feature-name">アダプティブ・ドリル</div>
+      <div class="feature-desc">IRTで能力値を推定し、その子にとって最も学びの多い難易度の問題を自動で選んで出題します。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-top"><div class="feature-icon">📷</div><div class="badge badge-live">現在利用可能</div></div>
+      <div class="feature-name">AI問題自動生成</div>
+      <div class="feature-desc">先生が撮影した通学路の写真から、Vision AIとLLMが問題・解説・難易度を一括生成します。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-top"><div class="feature-icon">🏆</div><div class="badge badge-live">現在利用可能</div></div>
+      <div class="feature-name">イベント形式のテスト</div>
+      <div class="feature-desc">「交通安全週間」など期間を区切ったイベントで、クラス対抗ランキングを楽しみながら学べます。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-top"><div class="feature-icon">🕶️</div><div class="badge badge-soon">今後の展開</div></div>
+      <div class="feature-name">動画・VRシミュレーション</div>
+      <div class="feature-desc">テキスト・写真での学習の先に、動画教材、VRでの疑似体験、オープンバッジ発行を計画しています。</div>
+    </div>
+  </div>
+</div>
+
+<div class="route">
+  <!-- 3km 画面イメージ -->
+  <div class="waypoint" id="screens">
+    <div class="wp-content">
+      <div class="marker mono">3km</div>
+      <div class="wp-body">
+        <div class="wp-eyebrow">画面イメージ</div>
+        <h2 class="wp-title">生徒の画面、先生の画面。</h2>
+        <p class="wp-text">生徒向けはポップに、先生向けは落ち着いたトーンに。同じ設計思想の上で、使う人にあわせて表情を変えています。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-top:-16px;margin-bottom:72px">
+  <div class="screens-grid">
+    <div>
+      <div class="device">
+        <div class="device-bar"><div class="device-dot"></div><div class="device-dot"></div><div class="device-dot"></div></div>
+        <div class="device-body">
+          <div class="mock-qhead"><span>問題 12 / 20</span><span class="mock-badge">道路標識</span></div>
+          <div class="mock-photo">📍 通学路の写真（撮影地点タグ付き）</div>
+          <div class="mock-q">この標識がある交差点。自転車はどう進むのが正しい？</div>
+          <div class="mock-choice correct">✓ 一時停止してから左右確認</div>
+          <div class="mock-choice">減速せずそのまま通過</div>
+          <div class="mock-choice">歩道に上がって進む</div>
+        </div>
+      </div>
+      <div class="screen-cap">生徒用：ドリル画面（イメージ）</div>
+    </div>
+    <div>
+      <div class="device">
+        <div class="device-bar"><div class="device-dot"></div><div class="device-dot"></div><div class="device-dot"></div></div>
+        <div class="device-body">
+          <div class="mock-score">
+            <div class="mock-score-num">742</div>
+            <div class="mock-score-lbl">/ 1000点・交通安全週間</div>
+          </div>
+          <div class="mock-rank"><div class="mock-av">A</div><span style="flex:1">あおいくん</span><b>810</b></div>
+          <div class="mock-rank"><div class="mock-av">S</div><span style="flex:1">さくらさん（あなた）</span><b>742</b></div>
+          <div class="mock-rank"><div class="mock-av">R</div><span style="flex:1">りくと</span><b>698</b></div>
+        </div>
+      </div>
+      <div class="screen-cap">生徒用：イベントランキング画面（イメージ）</div>
+    </div>
+  </div>
+</div>
+
+<div class="route">
+  <!-- 4km 学校での使い方 -->
+  <div class="waypoint" id="adopt">
+    <div class="wp-content">
+      <div class="marker mono">4km</div>
+      <div class="wp-body">
+        <div class="wp-eyebrow">学校での使い方</div>
+        <h2 class="wp-title">ホームルームの5分間から始められます。</h2>
+        <p class="wp-text">個人情報の登録は不要。学校コード・学年・組・出席番号・ニックネームだけでログインできるので、生徒側の導入負担はほとんどありません。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-narrow" style="margin-top:-16px;margin-bottom:56px">
+  <div class="steps">
+    <div class="step">
+      <div class="step-n mono">01</div>
+      <div>
+        <div class="step-title">学校コードを決める</div>
+        <div class="step-desc">学校名の略称など、生徒と共有できる任意の英数字コードを1つ決めます（例：CHOFU001）。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n mono">02</div>
+      <div>
+        <div class="step-title">先生が通学路を撮影する</div>
+        <div class="step-desc">教員ダッシュボードの問題生成ツールで、危ないと感じる交差点や標識を撮影・アップロードします。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n mono">03</div>
+      <div>
+        <div class="step-title">学習イベントを開始する</div>
+        <div class="step-desc">「交通安全週間」など5日間×1日5分のイベントを設定すると、生徒画面にランキングが表示されます。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n mono">04</div>
+      <div>
+        <div class="step-title">結果を見てふりかえる</div>
+        <div class="step-desc">教員ダッシュボードでカテゴリ別の理解度・参加率を確認し、次の撮影スポットの参考にします。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="adopt-grid">
+    <div class="adopt-card">
+      <div class="adopt-title">🏫 公立学校・私立学校</div>
+      <div class="adopt-desc">ホームルームや総合的な学習の時間を使い、学年・クラス単位で導入できます。</div>
+    </div>
+    <div class="adopt-card">
+      <div class="adopt-title">📖 学習塾・民間施設</div>
+      <div class="adopt-desc">通塾路の安全教育や、保護者向けの安心材料としてご活用いただけます。</div>
+    </div>
+    <div class="adopt-card">
+      <div class="adopt-title">🌱 フリースクール</div>
+      <div class="adopt-desc">少人数・自分のペースでの学習にも、イベントを使わないドリル形式で対応できます。</div>
+    </div>
+  </div>
+</div>
+
+<section class="contact-section" id="contact">
+  <div class="container-narrow">
+    <div class="contact-title">導入のご相談・資料のご請求</div>
+    <p class="contact-sub">学校コードの発行方法、費用、導入スケジュールなど、お気軽にご相談ください。U☆PoC 学生コンペ出展作品としての詳細資料もお送りできます。</p>
+    <div class="contact-ctas">
+      <a href="mailto:contact@u-poc.example?subject=U-Pocについての問い合わせ" class="btn-solid">お問い合わせ・資料請求 →</a>
+      <a href="teacher.html" class="btn-outline">先に教員ダッシュボードを見る</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© 2026 U-Poc — U☆PoC 学生コンペ出展作品</div>
+    <div class="footer-links">
+      <a href="app.html">生徒として始める</a>
+      <a href="teacher.html">教員ダッシュボード</a>
+      <a href="#concept">コンセプト</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
