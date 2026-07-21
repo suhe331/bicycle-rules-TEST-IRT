@@ -99,9 +99,12 @@ textarea{resize:vertical;line-height:1.6}
 <div class="wrap">
 
 <div class="topbar">
-  <div class="logo">U<em>-</em>Poc</div>
+  <a href="teacher.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+    <div class="logo">U<em>-</em>Poc</div>
+  </a>
   <div class="teacher-badge">教員モード</div>
 </div>
+<a href="teacher.html" style="font-size:12px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:-4px">← 教員ダッシュボードへ戻る</a>
 
 <div class="error-msg" id="error-msg"></div>
 
@@ -241,6 +244,14 @@ const SUPABASE_KEY='sb_publishable_IibWbT-1J9MeXGN5XkJfMw_PqsRfgsi';
 let compressedBlob=null;
 let uploadedUrl=null;
 let generatedData=null;
+
+(function prefillSchoolFromQuery(){
+  const sc=new URLSearchParams(location.search).get('school');
+  if(sc)document.addEventListener('DOMContentLoaded',()=>{
+    const el=document.getElementById('school-code');
+    if(el)el.value=sc.toUpperCase();
+  });
+})();
 
 function api(path,opts={}){
   return fetch(SUPABASE_URL+path,{...opts,headers:{
