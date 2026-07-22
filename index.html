@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>U-Poc（ユーポック）｜自分の通学路で学ぶ、自転車安全学習アプリ</title>
-<meta name="description" content="2026年4月の青切符制度に対応。自分の通学路の写真から出題されるから、交通ルールが「自分ごと」になる自転車安全学習アプリ U-Poc。">
+<title>ちゃり検｜自分の通学路で学ぶ、自転車安全学習アプリ</title>
+<meta name="description" content="2026年4月の青切符制度に対応。自分の通学路の写真から出題されるから、交通ルールが「自分ごと」になる自転車安全学習アプリ ちゃり検。">
 <style>
 :root{
   --ink-line:#e2ddd5;
@@ -41,7 +41,18 @@ img{max-width:100%;display:block}
 .btn-solid:hover{background:var(--accent-dark)}
 
 /* ---------- hero ---------- */
-.hero{background:var(--cream);color:var(--text);padding:64px 0 96px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero{
+  background:
+    linear-gradient(100deg, rgba(245,243,238,.97) 0%, rgba(245,243,238,.90) 32%, rgba(245,243,238,.55) 56%, rgba(245,243,238,.18) 78%),
+    url('assets/hero.jpg') center 30%/cover no-repeat;
+  color:var(--text);padding:64px 0 96px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)
+}
+@media(max-width:760px){
+  .hero{background:
+    linear-gradient(180deg, rgba(245,243,238,.97) 0%, rgba(245,243,238,.93) 45%, rgba(245,243,238,.80) 68%, rgba(245,243,238,.55) 100%),
+    url('assets/hero.jpg') center 25%/cover no-repeat;
+  }
+}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#20200f;background:var(--line);padding:5px 12px;border-radius:20px;margin-bottom:22px}
 .hero-title{font-size:clamp(28px,4.6vw,46px);font-weight:700;letter-spacing:-.02em;line-height:1.35;max-width:760px}
 .hero-title .u{color:var(--accent)}
@@ -153,7 +164,7 @@ section{padding:0}
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="#" class="logo">U<em>-</em>Poc</a>
+    <a href="#" class="logo">ちゃり<em>検</em></a>
     <nav class="header-nav">
       <a href="#concept">コンセプト</a>
       <a href="#features">できること</a>
@@ -172,7 +183,7 @@ section{padding:0}
   <div class="container">
     <div class="hero-eyebrow">🚲 2026年4月〜 自転車 青切符制度スタート</div>
     <h1 class="hero-title">自分の<span class="u">通学路</span>で学ぶから、<br>交通ルールが自分ごとになる。</h1>
-    <p class="hero-sub">U-Poc（ユーポック）は、先生が撮った地元の交差点写真から問題が出題される自転車安全学習アプリです。「あ、ここ知ってる」という実感が、ルールを頭ではなく体に残します。</p>
+    <p class="hero-sub">ちゃり検は、先生が撮った地元の交差点写真から問題が出題される自転車安全学習アプリです。「あ、ここ知ってる」という実感が、ルールを頭ではなく体に残します。</p>
     <div class="hero-ctas">
       <a href="app.html" class="btn-primary">生徒として始める →</a>
       <a href="teacher.html" class="btn-outline">先生・学校の方はこちら</a>
@@ -195,17 +206,17 @@ section{padding:0}
         <div class="wp-eyebrow">きっかけ</div>
         <h2 class="wp-title">「無事故」は、当たり前じゃなかった。</h2>
         <p class="pull-quote">サイクリング部で2,000kmを走り、無事故でいられた経験が原点。その経験を、すべての若者に届けたい。</p>
-        <p class="wp-text">2026年4月、自転車の交通違反に反則金を科す<b>青切符制度</b>が施行されました。ルールを知らなかったでは済まされない時代に、多くの学校教材は「一般的な交差点」の絵や文章で学ぶものがほとんどです。U-Pocは、その「自分ごと感の薄さ」を変えるところから始まりました。</p>
+        <p class="wp-text">2026年4月、自転車の交通違反に反則金を科す<b>青切符制度</b>が施行されました。ルールを知らなかったでは済まされない時代に、多くの学校教材は「一般的な交差点」の絵や文章で学ぶものがほとんどです。ちゃり検は、その「自分ごと感の薄さ」を変えるところから始まりました。</p>
       </div>
     </div>
   </div>
 
-  <!-- 1km U-Pocとは -->
+  <!-- 1km ちゃり検とは -->
   <div class="waypoint">
     <div class="wp-content">
       <div class="marker mono">1km</div>
       <div class="wp-body">
-        <div class="wp-eyebrow">U-Pocとは</div>
+        <div class="wp-eyebrow">ちゃり検とは</div>
         <h2 class="wp-title">教材の舞台は、生徒が毎日通る道。</h2>
         <p class="wp-text">先生が地元の交差点や標識をスマホで撮影すると、AIがその写真をもとに問題文・選択肢・解説を自動生成します。生徒が問題を開いたとき目に入るのは、教科書の挿絵ではなく<b>「あ、ここ知ってる」</b>という見覚えのある景色。景色と結びついた記憶は、覚えるためのルールではなく、思い出せるルールになります。</p>
         <p class="wp-text">出題の難易度は、<b>IRT（項目反応理論）</b>という測定手法で一人ひとりに合わせて自動調整されます。得意な子には少しだけ難しい問題を、まだ自信がない子にはやさしい問題を。ちょうどいい難しさの問題ほど、生徒の理解度を正確に測れるからです。</p>
@@ -366,7 +377,7 @@ section{padding:0}
     <div class="contact-title">導入のご相談・資料のご請求</div>
     <p class="contact-sub">学校コードの発行方法、費用、導入スケジュールなど、お気軽にご相談ください。U☆PoC 学生コンペ出展作品としての詳細資料もお送りできます。</p>
     <div class="contact-ctas">
-      <a href="mailto:contact@u-poc.example?subject=U-Pocについての問い合わせ" class="btn-solid">お問い合わせ・資料請求 →</a>
+      <a href="mailto:contact@u-poc.example?subject=ちゃり検についての問い合わせ" class="btn-solid">お問い合わせ・資料請求 →</a>
       <a href="teacher.html" class="btn-outline">先に教員ダッシュボードを見る</a>
     </div>
   </div>
@@ -374,7 +385,7 @@ section{padding:0}
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div>© 2026 U-Poc — U☆PoC 学生コンペ出展作品</div>
+    <div>© 2026 ちゃり検 — U☆PoC 学生コンペ出展作品</div>
     <div class="footer-links">
       <a href="app.html">生徒として始める</a>
       <a href="teacher.html">教員ダッシュボード</a>
