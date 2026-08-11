@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>自転車交通安全｜18のルール</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7fa;color:#243447;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif}
+header{background:#fff;border-bottom:1px solid #e5e9ef;padding:28px 20px}
+.head{max-width:1050px;margin:auto}
+h1{margin:0;font-size:30px;color:#17324d}
+.sub{color:#687787;margin-top:6px}
+.wrap{max-width:1050px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:270px 1fr;gap:20px}
+.panel,.lesson{background:#fff;border:1px solid #e4e9ef;border-radius:14px}
+.panel{padding:14px;height:max-content}
+.group{font-weight:700;color:#17324d;padding:10px 8px 6px}
+.item{width:100%;border:0;background:none;text-align:left;padding:9px 10px;border-radius:8px;cursor:pointer;color:#344555}
+.item:hover{background:#f0f4f9}
+.item.active{background:#e8f0ff;color:#1558b0;font-weight:700}
+.n{display:inline-block;width:24px;color:#7a8793}
+.lesson{padding:28px}
+.bar{height:7px;background:#e8edf2;border-radius:5px;margin-bottom:22px}
+.fill{height:100%;background:#3271d8;border-radius:5px;transition:.2s}
+.meta{font-size:13px;color:#3271d8;font-weight:700}
+.title{font-size:29px;margin:5px 0 18px;color:#17324d}
+
+/* 画像表示部分 */
+.lesson-image{
+  width:100%;
+  height:280px;
+  object-fit:contain;
+  display:block;
+  background:#eef3f7;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+.image-placeholder{
+  width:100%;
+  height:280px;
+  border-radius:12px;
+  background:#eef3f7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#7a8793;
+  text-align:center;
+  padding:20px;
+  margin-bottom:20px;
+}
+.text{font-size:16px;line-height:1.9}
+.point{margin:18px 0;padding:13px 15px;background:#f4f7fa;border-left:4px solid #3271d8;line-height:1.7}
+.quiz{border-top:1px solid #e4e9ef;padding-top:18px;margin-top:22px}
+.quiz h3{margin:0 0 12px}
+.choice{display:block;width:100%;text-align:left;padding:11px 13px;margin:8px 0;background:#fff;border:1px solid #d9e0e7;border-radius:8px;cursor:pointer;font-size:15px}
+.choice:hover{border-color:#3271d8;background:#f7faff}
+.choice.correct{background:#eaf7f0;border-color:#35a46e}
+.choice.wrong{background:#fff0f0;border-color:#d95a5a}
+.feedback{min-height:24px;font-weight:700;margin-top:10px}
+.nav{display:flex;justify-content:space-between;margin-top:24px}
+.nav button{background:#17324d;color:#fff;border:0;border-radius:8px;padding:11px 17px;cursor:pointer}
+.nav button:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:760px){
+  .wrap{grid-template-columns:1fr}
+  .panel{order:2}
+  .lesson{order:1}
+  .title{font-size:25px}
+  .lesson-image,.image-placeholder{height:220px}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="head">
+    <h1>自転車交通安全 18のルール</h1>
+    <div class="sub">1項目ずつ学んで、確認クイズに挑戦しよう。</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="panel" id="menu"></aside>
+
+  <main class="lesson">
+    <div class="bar"><div class="fill" id="fill"></div></div>
+
+    <div class="meta" id="meta"></div>
+    <div class="title" id="title"></div>
+
+    <!-- ここに18枚の画像を表示 -->
+    <img id="lessonImage" class="lesson-image" alt="">
+    <div id="imagePlaceholder" class="image-placeholder" style="display:none">
+      <div>
+        画像がありません。<br>
+        <small>assets/safety/ に画像を入れてください。</small>
+      </div>
+    </div>
+
+    <div class="text" id="text"></div>
+    <div class="point" id="point"></div>
+
+    <section class="quiz">
+      <h3>確認クイズ</h3>
+      <div id="q"></div>
+      <div id="choices"></div>
+      <div class="feedback" id="feedback"></div>
+    </section>
+
+    <div class="nav">
+      <button id="prev" onclick="move(-1)">← 前へ</button>
+      <button id="next" onclick="move(1)">次へ →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/*
+========================================================
+画像について
+========================================================
+
+GitHub上では、以下のフォルダを作ってください。
+
+assets/
+└─ safety/
+   ├─ 01_signal.jpg
+   ├─ 02_stop.jpg
+   ├─ 03_left.jpg
+   ├─ 04_sidewalk.jpg
+   ├─ 05_right_turn.jpg
+   ├─ 06_smartphone.jpg
+   ├─ 07_umbrella.jpg
+   ├─ 08_earphone.jpg
+   ├─ 09_two_people.jpg
+   ├─ 10_drinking.jpg
+   ├─ 11_parallel.jpg
+   ├─ 12_brake.jpg
+   ├─ 13_light.jpg
+   ├─ 14_luggage.jpg
+   ├─ 15_clothes.jpg
+   ├─ 16_helmet.jpg
+   ├─ 17_accident.jpg
+   └─ 18_insurance.jpg
+
+画像を差し替えるときは、同じファイル名で
+画像をアップロードするだけでOKです。
+
+jpg以外を使う場合は、下の image のファイル名を変更してください。
+========================================================
+*/
+
+const data = [
+["A","交通ルール","信号無視","01_signal.jpg",
+"自転車も車両です。信号に従い、赤信号では停止線の手前で止まります。",
+"「車が来ていないから進む」ではなく、信号を守ることが基本です。",
+["赤信号でも車がいなければ進む","赤信号では停止する","歩行者用信号だけを見る"],1],
+
+["A","交通ルール","一時停止","02_stop.jpg",
+"一時停止の標識がある場所では、停止線の手前でいったん止まり、安全を確認します。",
+"見通しが悪い交差点ほど、確実な停止と左右確認が重要です。",
+["速度を落とせば止まらなくてよい","停止線を越えてから確認する","停止線の手前で止まって確認する"],2],
+
+["A","交通ルール","右側通行・逆走","03_left.jpg",
+"車道では原則として道路の左側を通行します。右側通行や逆走は危険です。",
+"自動車などと正しい方向で通行することが衝突防止につながります。",
+["右側を走る","左側を走る","空いている側を走る"],1],
+
+["A","交通ルール","歩道での速度","04_sidewalk.jpg",
+"歩道を通行できる場合でも、歩行者の通行を妨げないよう徐行します。",
+"歩行者がいるときは、すぐに止まれる速度を意識します。",
+["歩行者より速く走る","歩行者優先で徐行する","ベルを鳴らせば高速走行できる"],1],
+
+["A","交通ルール","二段階右折","05_right_turn.jpg",
+"自転車で交差点を右折するときは、原則として二段階右折を行います。",
+"いったん直進して向きを変え、安全を確認してから進みます。",
+["車と同じように一気に右折","二段階で右折","歩道へ乗り上げて右折"],1],
+
+["B","やってはいけないこと","スマホながら運転","06_smartphone.jpg",
+"自転車を運転しながらスマートフォンを操作するのは危険です。",
+"画面を見ることで、信号・車・歩行者などを見落とします。",
+["停車して操作する","走りながら操作する","片手なら操作してよい"],0],
+
+["B","やってはいけないこと","傘さし運転","07_umbrella.jpg",
+"傘を差しながらの運転は、ハンドルやブレーキ操作を妨げます。",
+"雨の日はレインウェアなどを利用します。",
+["傘を片手で持つ","レインウェアを使う","傘をハンドルに固定する"],1],
+
+["B","やってはいけないこと","イヤホン","08_earphone.jpg",
+"周囲の音が聞こえにくい状態では、車などの接近に気づきにくくなります。",
+"安全確認に必要な周囲の音が聞こえる状態で走行します。",
+["周囲の音が聞こえる状態にする","音量を最大にする","両耳を完全にふさぐ"],0],
+
+["B","やってはいけないこと","二人乗り","09_two_people.jpg",
+"二人乗りはバランスを崩しやすく、制動にも影響します。",
+"安全のため、原則として一人で乗車します。",
+["二人で乗る","一人で乗る","低速なら二人で乗る"],1],
+
+["B","やってはいけないこと","飲酒運転","10_drinking.jpg",
+"飲酒後の自転車運転は重大な危険につながります。",
+"飲酒したら自転車に乗らないことが原則です。",
+["少量なら乗る","水を飲めば乗る","飲酒したら乗らない"],2],
+
+["B","やってはいけないこと","並進","11_parallel.jpg",
+"自転車が横に並んで走ると、他の交通の妨げになります。",
+"原則として一列で走行します。",
+["横に並ぶ","一列で走る","広い道路なら並んでよい"],1],
+
+["C","乗る前の確認","ブレーキ点検","12_brake.jpg",
+"乗車前にブレーキが正常に作動するか確認します。",
+"異常がある場合は修理してから乗ります。",
+["確認せず乗る","左右のブレーキを確認する","坂道で試す"],1],
+
+["C","乗る前の確認","夜間ライト","13_light.jpg",
+"夜間は前照灯などを適切に点灯し、自分の存在を周囲に知らせます。",
+"ライトは「見る」だけでなく「見られる」ためにも重要です。",
+["ライトを消す","反射材だけで走る","ライトを点灯する"],2],
+
+["C","乗る前の確認","荷物の固定","14_luggage.jpg",
+"荷物がハンドルに絡んだり落下したりすると事故につながります。",
+"荷物は安全に固定し、運転操作を妨げないようにします。",
+["ハンドルにぶら下げる","安全に固定する","手に持って走る"],1],
+
+["C","乗る前の確認","服装・フットウェア","15_clothes.jpg",
+"裾の長い服や不安定な履物は、車輪に絡んだりペダル操作を妨げたりします。",
+"安全にペダルを操作できる服装・靴を選びます。",
+["裾をそのままにする","動きやすい服装・靴を選ぶ","サンダルで走る"],1],
+
+["C","乗る前の確認","ヘルメット","16_helmet.jpg",
+"自転車に乗るときはヘルメットを着用し、正しくフィットさせます。",
+"サイズと位置を確認し、あごひもも適切に調整します。",
+["あごひもをゆるめる","正しく着用する","頭に乗せるだけ"],1],
+
+["D","もしものとき","事故対応","17_accident.jpg",
+"事故が起きたら、まず安全を確保し、必要に応じて119番・110番へ連絡します。",
+"相手がいる場合は救護を優先し、状況を確認して対応します。",
+["そのまま立ち去る","安全確保と必要な通報をする","写真だけ撮って帰る"],1],
+
+["D","もしものとき","自転車保険","18_insurance.jpg",
+"自転車事故では相手に大きなけがをさせる可能性があります。保険などで万一に備えます。",
+"住んでいる地域の条例や学校のルールも確認しましょう。",
+["事故は起きないので不要","万一に備えて確認する","友人の保険で必ず補償される"],1]
+];
+
+let cur=0;
+
+function build(){
+  const menu=document.getElementById("menu");
+  const groups=["A","B","C","D"];
+  menu.innerHTML="";
+  groups.forEach(g=>{
+    const group=data.find(x=>x[0]===g)[1];
+    const h=document.createElement("div");
+    h.className="group";
+    h.textContent=group;
+    menu.appendChild(h);
+
+    data.forEach((x,i)=>{
+      if(x[0]!==g)return;
+      const b=document.createElement("button");
+      b.className="item";
+      b.id="m"+i;
+      b.innerHTML='<span class="n">'+(i+1)+'</span>'+x[2];
+      b.onclick=()=>show(i);
+      menu.appendChild(b);
+    });
+  });
+}
+
+function show(i){
+  cur=i;
+  const x=data[i];
+
+  document.getElementById("meta").textContent=x[1];
+  document.getElementById("title").textContent=(i+1)+". "+x[2];
+
+  const img=document.getElementById("lessonImage");
+  const placeholder=document.getElementById("imagePlaceholder");
+
+  img.src="assets/safety/"+x[3];
+  img.alt=x[2];
+
+  img.onload=()=>{
+    img.style.display="block";
+    placeholder.style.display="none";
+  };
+
+  img.onerror=()=>{
+    img.style.display="none";
+    placeholder.style.display="flex";
+  };
+
+  document.getElementById("text").textContent=x[4];
+  document.getElementById("point").textContent="ポイント："+x[5];
+
+  document.getElementById("q").textContent="次のうち、正しい行動はどれ？";
+
+  const choices=document.getElementById("choices");
+  choices.innerHTML="";
+
+  x[6].forEach((v,j)=>{
+    const b=document.createElement("button");
+    b.className="choice";
+    b.textContent=v;
+    b.onclick=()=>answer(j);
+    choices.appendChild(b);
+  });
+
+  document.getElementById("feedback").textContent="";
+  document.getElementById("fill").style.width=((i+1)/18*100)+"%";
+
+  document.getElementById("prev").disabled=i===0;
+  document.getElementById("next").disabled=i===17;
+
+  document.querySelectorAll(".item").forEach(b=>b.classList.remove("active"));
+  document.getElementById("m"+i).classList.add("active");
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function answer(j){
+  const x=data[cur];
+  const bs=document.querySelectorAll(".choice");
+  bs.forEach(b=>b.disabled=true);
+
+  const f=document.getElementById("feedback");
+
+  if(j===x[7]){
+    bs[j].classList.add("correct");
+    f.textContent="○ 正解！";
+    f.style.color="#2e9d67";
+  }else{
+    bs[j].classList.add("wrong");
+    bs[x[7]].classList.add("correct");
+    f.textContent="× 正解を確認しましょう。";
+    f.style.color="#d84b4b";
+  }
+}
+
+function move(d){
+  show(cur+d);
+}
+
+build();
+show(0);
+</script>
+</body>
+</html>
