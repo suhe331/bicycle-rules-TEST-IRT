@@ -68,6 +68,120 @@ h1{margin:0;font-size:30px;color:#17324d}
   .lesson-image,.image-placeholder{height:220px}
 }
 </style>
+
+<style>
+ruby{ruby-position:over;ruby-align:center}
+ruby rt{font-size:.48em;font-weight:500;color:#5d6b78}
+</style>
+<script>
+const FURI = [
+["自転車交通安全","じてんしゃこうつうあんぜん"],
+["自転車保険","じてんしゃほけん"],
+["自転車","じてんしゃ"],
+["交通安全","こうつうあんぜん"],
+["交通ルール","こうつうルール"],
+["信号無視","しんごうむし"],
+["一時停止","いちじていし"],
+["右側通行","みぎがわつうこう"],
+["逆走","ぎゃくそう"],
+["歩道での速度","ほどうでのそくど"],
+["二段階右折","にだんかいうせつ"],
+["運転","うんてん"],
+["傘","かさ"],
+["二人乗り","ふたりのり"],
+["飲酒運転","いんしゅうんてん"],
+["並進","へいしん"],
+["点検","てんけん"],
+["夜間","やかん"],
+["荷物","にもつ"],
+["固定","こてい"],
+["服装","ふくそう"],
+["事故対応","じこたいおう"],
+["確認クイズ","かくにんクイズ"],
+["正解","せいかい"],
+["正しい","ただしい"],
+["行動","こうどう"],
+["学んで","まなんで"],
+["項目","こうもく"],
+["挑戦","ちょうせん"],
+["車両","しゃりょう"],
+["信号","しんごう"],
+["赤信号","あかしんごう"],
+["停止線","ていしせん"],
+["手前","てまえ"],
+["止まります","とまります"],
+["安全","あんぜん"],
+["確認","かくにん"],
+["見通し","みとおし"],
+["危険","きけん"],
+["道路","どうろ"],
+["左側","ひだりがわ"],
+["右側","みぎがわ"],
+["通行","つうこう"],
+["歩道","ほどう"],
+["歩行者","ほこうしゃ"],
+["速度","そくど"],
+["徐行","じょこう"],
+["交差点","こうさてん"],
+["右折","うせつ"],
+["直進","ちょくしん"],
+["操作","そうさ"],
+["周囲","しゅうい"],
+["音","おと"],
+["雨","あめ"],
+["利用","りよう"],
+["飲酒","いんしゅ"],
+["乗車","じょうしゃ"],
+["一列","いちれつ"],
+["異常","いじょう"],
+["点灯","てんとう"],
+["存在","そんざい"],
+["運転操作","うんてんそうさ"],
+["履物","はきもの"],
+["着用","ちゃくよう"],
+["正しく","ただしく"],
+["事故","じこ"],
+["必要","ひつよう"],
+["通報","つうほう"],
+["救護","きゅうご"],
+["保険","ほけん"],
+["地域","ちいき"],
+["条例","じょうれい"],
+["学校","がっこう"],
+["問題","もんだい"],
+["選択肢","せんたくし"],
+["表示","ひょうじ"],
+["現在","げんざい"],
+["画像","がぞう"],
+["ありません","ありません"]
+].sort((a,b)=>b[0].length-a[0].length);
+
+function furigana(s){
+  let out=s;
+  for(const [word,reading] of FURI){
+    const safe=word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    out=out.replace(new RegExp(safe,'g'),`<ruby>${word}<rt>${reading}</rt></ruby>`);
+  }
+  return out;
+}
+function setFurigana(id){
+  const el=document.getElementById(id);
+  if(el) el.innerHTML=furigana(el.textContent);
+}
+const _show=show;
+show=function(i){
+  _show(i);
+  ["meta","title","text","point","q","feedback"].forEach(setFurigana);
+  document.querySelectorAll(".item").forEach(el=>{
+    const n=el.querySelector(".n");
+    const label=el.textContent.replace(n?n.textContent:"","");
+    if(n) el.innerHTML='<span class="n">'+n.textContent+'</span>'+furigana(label);
+  });
+  document.getElementById("prev").innerHTML=furigana("← 前へ");
+  document.getElementById("next").innerHTML=furigana("次へ →");
+};
+</script>
+
 </head>
 
 <body>
@@ -343,5 +457,25 @@ function move(d){
 build();
 show(0);
 </script>
+
+<script>
+window.addEventListener("load",()=>{
+  const originalShow=show;
+  show=function(i){
+    originalShow(i);
+    ["meta","title","text","point","q","feedback"].forEach(setFurigana);
+    document.querySelectorAll(".item").forEach(el=>{
+      const n=el.querySelector(".n");
+      if(!n)return;
+      const label=el.textContent.replace(n.textContent,"");
+      el.innerHTML='<span class="n">'+n.textContent+'</span>'+furigana(label);
+    });
+    document.getElementById("prev").innerHTML=furigana("← 前へ");
+    document.getElementById("next").innerHTML=furigana("次へ →");
+  };
+  show(cur);
+});
+</script>
+
 </body>
 </html>
