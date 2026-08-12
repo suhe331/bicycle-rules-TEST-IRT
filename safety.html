@@ -48,6 +48,11 @@ h1{margin:0;font-size:30px;color:#17324d}
 .wrap{grid-template-columns:1fr}.panel{order:2}.lesson{order:1}.title{font-size:25px}
 .lesson-image,.result-image,.image-placeholder{height:220px}
 }
+
+.result h3{font-size:21px;margin-bottom:12px}
+.feedback{padding:10px 12px;border-radius:8px;background:#f4f7fa;min-height:0}
+.feedback.good{background:#eaf7f0;color:#24784f!important}
+.feedback.bad{background:#fff0f0;color:#c43f3f!important}
 </style>
 </head>
 
@@ -75,7 +80,7 @@ h1{margin:0;font-size:30px;color:#17324d}
 
 <!-- ② 予測クイズ -->
 <section class="quiz">
-<h3>このあと、どうなる？</h3>
+<h3>確認クイズ</h3>
 <p class="question" id="q"></p>
 <div id="choices"></div>
 <div class="feedback" id="feedback"></div>
@@ -83,7 +88,7 @@ h1{margin:0;font-size:30px;color:#17324d}
 
 <!-- ③ 結果のイラスト＋④ 教訓 -->
 <section class="result" id="result">
-<h3>起こる可能性があること</h3>
+<h3>もしかしたら・・・</h3>
 <img id="resultImage" class="result-image" alt="">
 <div id="resultPlaceholder" class="image-placeholder" style="display:none">
 <div>結果の画像がありません。<br><small>assets/safety/ に画像を入れてください。</small></div>
@@ -248,7 +253,12 @@ function show(i){
  document.getElementById("text").textContent=x[5];
  document.getElementById("point").textContent="教訓："+x[6];
 
- document.getElementById("q").textContent="このあと、どうなると思う？";
+ document.getElementById("q").textContent = quizQuestion(x[2]);
+  const customChoices = topicChoices(x[2]);
+  if(customChoices){
+    x[7] = customChoices;
+    x[8] = 0;
+  }
  const choices=document.getElementById("choices"); choices.innerHTML="";
  x[7].forEach((v,j)=>{
    const b=document.createElement("button");
@@ -266,20 +276,123 @@ function show(i){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
+function quizQuestion(title){
+  const questions = {
+    "信号無視":"赤信号になったら、どうする？",
+    "一時停止":"一時停止の標識があったら、どうする？",
+    "右側通行・逆走":"右側を走っていることに気づいたら、どうする？",
+    "歩道での速度":"歩道を走るとき、どうする？",
+    "二段階右折":"この交差点で右折するとき、どうする？",
+    "スマホながら運転":"走行中にスマホを使いたくなったら、どうする？",
+    "傘さし運転":"雨が降ってきたら、どうする？",
+    "イヤホン":"イヤホンをしているとき、どうする？",
+    "二人乗り":"友達を後ろに乗せてほしいと言われたら、どうする？",
+    "飲酒運転":"お酒を飲んだあと、自転車に乗ることになったら、どうする？",
+    "並進":"自転車で横に並んで走っているとき、どうする？",
+    "ブレーキ点検":"ブレーキの効きが悪いことに気づいたら、どうする？",
+    "夜間ライト":"暗くなってきたら、どうする？",
+    "荷物の固定":"荷物が不安定なことに気づいたら、どうする？",
+    "服装・フットウェア":"ペダルに引っかかりそうな服装だったら、どうする？",
+    "ヘルメット":"ヘルメットを着けずに出発しようとしたら、どうする？",
+    "事故対応":"自転車で人や車にぶつかったら、まずどうする？",
+    "自転車保険":"自転車に乗る前に、事故への備えとしてどうする？"
+  };
+  return questions[title] || "このあと、どうする？";
+}
+
+function topicChoices(title){
+  const choices = {
+    "信号無視":[
+      "停止線の手前で止まる",
+      "そのまま進む"
+    ],
+    "一時停止":[
+      "停止線の手前でいったん止まり、安全を確認する",
+      "速度を落とすだけで通過する"
+    ],
+    "右側通行・逆走":[
+      "安全を確認して左側へ戻る",
+      "そのまま右側を走り続ける"
+    ],
+    "歩道での速度":[
+      "歩行者に配慮し、すぐ止まれる速度で走る",
+      "歩道でも速度を落とさず走る"
+    ],
+    "二段階右折":[
+      "交差点を二段階に分けて右折する",
+      "車と同じように右折する"
+    ],
+    "スマホながら運転":[
+      "安全な場所に止まってから使う",
+      "走りながら短時間だけ見る"
+    ],
+    "傘さし運転":[
+      "安全な場所で止まり、雨具を使う",
+      "傘を差したまま走る"
+    ],
+    "イヤホン":[
+      "周囲の音を聞ける状態にして走る",
+      "音量を小さくしてそのまま走る"
+    ],
+    "二人乗り":[
+      "二人乗りをせず、一人で走る",
+      "短い距離なら乗せる"
+    ],
+    "飲酒運転":[
+      "自転車に乗らず、別の移動手段を使う",
+      "少量なら自転車に乗る"
+    ],
+    "並進":[
+      "一列になり、周囲を確認して走る",
+      "人がいなければ、そのまま並んで走る"
+    ],
+    "ブレーキ点検":[
+      "乗る前に点検し、必要なら修理する",
+      "そのまま出発する"
+    ],
+    "夜間ライト":[
+      "ライトを点けて走る",
+      "暗くてもライトなしで走る"
+    ],
+    "荷物の固定":[
+      "荷物を安全に固定してから走る",
+      "片手で持って走る"
+    ],
+    "服装・フットウェア":[
+      "動きやすく、車輪などに絡みにくい服装にする",
+      "引っかかりそうでもそのまま走る"
+    ],
+    "ヘルメット":[
+      "ヘルメットを正しく着用してから出発する",
+      "そのまま出発する"
+    ],
+    "事故対応":[
+      "安全を確保し、必要に応じて警察・救急へ連絡する",
+      "そのまま走り去る"
+    ],
+    "自転車保険":[
+      "地域のルールも確認し、必要な保険等に備える",
+      "事故が起きてから考える"
+    ]
+  };
+  return choices[title] || null;
+}
+
 function answer(j){
  const x=data[cur];
  const bs=document.querySelectorAll(".choice");
  bs.forEach(b=>b.disabled=true);
  const f=document.getElementById("feedback");
+ f.classList.remove("good","bad");
  if(j===x[8]){
    bs[j].classList.add("correct");
-   f.textContent="○ 正解！";
-   f.style.color="#2e9d67";
+   f.textContent="正解";
+   f.classList.add("good");
  }else{
    bs[j].classList.add("wrong");
    bs[x[8]].classList.add("correct");
-   f.textContent="× 想定される危険を見てみよう。";
-   f.style.color="#d84b4b";
+   f.textContent="あぶない！";
+   f.classList.add("bad");
  }
  // 回答後に結果画像と教訓を表示
  document.getElementById("result").classList.add("show");
