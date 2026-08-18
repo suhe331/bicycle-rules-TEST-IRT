@@ -191,7 +191,7 @@ input:focus{outline:2px solid var(--accent);border-color:transparent}
             <div class="lv" data-lv="hard" onclick="selectEvLevel(this)">むずかしい</div>
           </div>
         </div>
-        <button class="btn-primary" onclick="createEvent()">イベントを開始する</button>
+        <button class="btn-primary" onclick="submitCreateEvent()">イベントを開始する</button>
         <div class="login-note">例：5日間×1日5分を想定した「交通安全週間」など。開始日〜終了日の間、生徒のダッシュボードにイベントバナーとクラスランキングが表示されます。</div>
       </div>
     </div>
@@ -373,7 +373,7 @@ function selectEvLevel(el){
 
 function toggleEventForm(){document.getElementById('event-form').classList.toggle('open')}
 
-async function createEvent(){
+async function submitCreateEvent(){
   const name=document.getElementById('ev-name').value.trim();
   const start=document.getElementById('ev-start').value;
   const end=document.getElementById('ev-end').value;
