@@ -497,57 +497,86 @@ const CATS=[
 ];
 
 // ─── イラストマッピング ───
-// タグ・カテゴリ・問題文のキーワードからイラストファイル名を返す
-const ILLUST_MAP = [
-  {keys:['信号無視','赤信号','信号機','信号を'],    ng:'13_signal_ignore.jpg', ok:'11_left_side.jpg'},
-  {keys:['一時停止','止まれ','停止線'],              ng:'17_fly_out.jpg',        ok:'11_left_side.jpg'},
-  {keys:['右側通行','逆走','左側を走'],              ng:'17_fly_out.jpg',        ok:'11_left_side.jpg'},
-  {keys:['歩道','歩行者'],                           ng:'10_sidewalk_fast.jpg',  ok:'11_left_side.jpg'},
-  {keys:['二段階右折','右折'],                       ng:'17_fly_out.jpg',        ok:'11_left_side.jpg'},
-  {keys:['スマホ','ながら運転','携帯'],              ng:'06_smartphone.jpg',     ok:'01_normal_boy.jpg'},
-  {keys:['傘','雨'],                                 ng:'07_umbrella.jpg',       ok:'01_normal_boy.jpg'},
-  {keys:['イヤホン','耳'],                           ng:'05_earphone.jpg',       ok:'01_normal_boy.jpg'},
-  {keys:['二人乗り','2人'],                          ng:'09_two_people.jpg',     ok:'01_normal_boy.jpg'},
-  {keys:['飲酒','お酒','酒'],                        ng:'16_drinking.jpg',       ok:'01_normal_boy.jpg'},
-  {keys:['並進','並んで'],                           ng:'10_sidewalk_fast.jpg',  ok:'11_left_side.jpg'},
-  {keys:['ブレーキ','制動'],                         ng:'15_fall_down.jpg',      ok:'08_air_pump.jpg'},
-  {keys:['ライト','無灯火','夜間'],                  ng:'19_no_light.jpg',       ok:'18_with_light.jpg'},
-  {keys:['荷物','積載','紐'],                        ng:'15_fall_down.jpg',      ok:'01_normal_boy.jpg'},
-  {keys:['サンダル','服装','フットウェア','裾'],     ng:'15_fall_down.jpg',      ok:'01_normal_boy.jpg'},
-  {keys:['ヘルメット'],                              ng:'15_fall_down.jpg',      ok:'01_normal_boy.jpg'},
-  {keys:['事故','衝突','ぶつかった'],                ng:'14_near_miss.jpg',      ok:'01_normal_boy.jpg'},
-  {keys:['保険'],                                    ng:'14_near_miss.jpg',      ok:'01_normal_boy.jpg'},
-];
+// assets/illust/fig01.png ～ fig37.png
+// fig01 = 自転車に乗る男子学生（通常走行・左向き）
+// fig02 = 自転車に乗る女子学生（通常走行・左向き）
+// fig03 = 自転車を押して歩く男
+// fig04 = 自転車に乗る男の後ろ姿
+// fig05 = イヤホンをして自転車に乗る男
+// fig06 = スマホ見ながら自転車に乗る女
+// fig07 = 傘を差しながら自転車に乗る男
+// fig08 = 自転車のタイヤに空気を入れる男（整備）
+// fig09 = 自転車専用レーンを走る男子
+// fig10 = 歩道を走り周りが迷惑している男
+// fig11 = 車道の左側を走る男（正しい走行）
+// fig12 = 自転車専用レーン（道路）
+// fig13 = 赤信号を無視して走る男子
+// fig14 = 女の人にぶつかりそうになる男子
+// fig15 = こけそうになる男子
+// fig16 = 飲酒運転をする男
+// fig17 = 飛び出して車にはねられそうになる男子
+// fig18 = 夜間・ライトをつけて走る男子（正しい）
+// fig19 = 夜間・無灯火で走る男子
+// fig20～25 = 交差点・道路・車のイラスト
+// fig26～33 = 信号機（各色・矢印）のイラスト
+// fig34 = 徐行の標識
+// fig35 = 止まれの標識
+// fig36 = 二人乗りのイラスト
+// fig37 = 二段階右折のイラスト
 
-// ファイル名 → assets/safety/ のパス
-const ASSETS = 'assets/safety/';
-const FILE_MAP = {
-  '01_normal_boy.jpg':   '01_signal.jpg',      // 通常走行の男子→01を流用
-  '05_earphone.jpg':     '08_earphone.jpg',
-  '06_smartphone.jpg':   '06_smartphone.jpg',
-  '07_umbrella.jpg':     '07_umbrella.jpg',
-  '08_air_pump.jpg':     '08_brake.jpg',       // 空気入れ→ブレーキ点検
-  '09_two_people.jpg':   '09_two_people.jpg',
-  '10_sidewalk_fast.jpg':'10_sidewalk.jpg',
-  '11_left_side.jpg':    '11_left_side.jpg',
-  '13_signal_ignore.jpg':'13_signal_ignore.jpg',
-  '14_near_miss.jpg':    '14_near_miss.jpg',
-  '15_fall_down.jpg':    '15_fall_down.jpg',
-  '16_drinking.jpg':     '16_drinking.jpg',
-  '17_fly_out.jpg':      '17_fly_out.jpg',
-  '18_with_light.jpg':   '18_with_light.jpg',
-  '19_no_light.jpg':     '19_no_light.jpg',
-};
+const ASSETS = 'assets/illust/';
+
+const ILLUST_MAP = [
+  // 信号・交差点系
+  {keys:['信号無視','赤信号'],              file:'fig13.png'},
+  {keys:['一時停止','止まれ','停止線'],     file:'fig17.png'},
+  {keys:['右側通行','逆走'],                file:'fig17.png'},
+  {keys:['二段階右折','右折'],              file:'fig37.png'},
+  // 歩道・走行系
+  {keys:['歩道','歩行者優先'],              file:'fig10.png'},
+  {keys:['並進','並んで走'],                file:'fig11.png'},
+  {keys:['車道の左側','左側を走'],          file:'fig11.png'},
+  // ながら運転系
+  {keys:['スマホ','ながら運転','携帯'],     file:'fig06.png'},
+  {keys:['傘','雨'],                        file:'fig07.png'},
+  {keys:['イヤホン'],                       file:'fig05.png'},
+  // 禁止行為系
+  {keys:['二人乗り','2人'],                 file:'fig36.png'},
+  {keys:['飲酒','お酒','酒'],               file:'fig16.png'},
+  // 整備・安全系
+  {keys:['ブレーキ','制動'],                file:'fig08.png'},
+  {keys:['無灯火'],                         file:'fig19.png'},
+  {keys:['夜間','ライト'],                  file:'fig18.png'},
+  {keys:['荷物','積載','紐'],               file:'fig15.png'},
+  {keys:['サンダル','服装','フットウェア'], file:'fig15.png'},
+  {keys:['ヘルメット'],                     file:'fig15.png'},
+  // 事故・保険系
+  {keys:['事故','衝突','ぶつかった'],       file:'fig14.png'},
+  {keys:['保険'],                           file:'fig17.png'},
+  // 標識系
+  {keys:['徐行'],                           file:'fig34.png'},
+  {keys:['止まれ','一時停止の標識'],        file:'fig35.png'},
+];
 
 function getIllust(q){
   const text = (q.question_text||'') + (q.category||'') + JSON.stringify(q.tags||[]);
   for(const m of ILLUST_MAP){
     if(m.keys.some(k=>text.includes(k))){
-      const fname = FILE_MAP[m.ng] || null;
-      return fname ? ASSETS + fname : null;
+      return ASSETS + m.file;
     }
   }
-  return null;
+  // デフォルト：カテゴリ別
+  const cat = q.category||'';
+  if(cat.includes('信号'))  return ASSETS + 'fig13.png';
+  if(cat.includes('標識'))  return ASSETS + 'fig34.png';
+  if(cat.includes('整備'))  return ASSETS + 'fig08.png';
+  if(cat.includes('マナー'))return ASSETS + 'fig10.png';
+  if(cat.includes('危険'))  return ASSETS + 'fig06.png';
+  if(cat.includes('事故'))  return ASSETS + 'fig14.png';
+  if(cat.includes('走行'))  return ASSETS + 'fig01.png';
+  if(cat.includes('安全'))  return ASSETS + 'fig01.png';
+  if(cat.includes('青切符'))return ASSETS + 'fig13.png';
+  return ASSETS + 'fig01.png';
 }
 
 let currentUser=null,currentEvent=null,eventScore=null;
@@ -944,7 +973,7 @@ async function saveSession(){
     };
     await api('/rest/v1/event_scores',{
       method:'POST',
-      headers:{'Prefer':'resolution=merge-duplicates,return=representation'},
+      headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
       body:JSON.stringify(payload)
     }).catch(e=>console.error(e));
     eventScore=payload;
