@@ -1035,7 +1035,7 @@ async function saveSession(){
       theta_score:sc.ts,accuracy_score:sc.as,volume_score:sc.vs,
       updated_at:new Date().toISOString()
     };
-    await api('/rest/v1/event_scores',{
+    await api('/rest/v1/event_scores?on_conflict=event_id,student_id',{
       method:'POST',
       headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
       body:JSON.stringify(payload)
