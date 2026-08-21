@@ -502,17 +502,30 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 <div class="screen active" id="screen-login">
   <div class="login-wrap">
     <div class="card">
-      <div class="login-title">はじめる</div>
-      <div class="login-sub">学校コードと情報を入力してください</div>
-      <div class="fg">
-        <label class="form-lbl">学校コード</label>
-        <input type="text" id="school-code" placeholder="例：CHOFU001" style="text-transform:uppercase">
+      <div class="login-title" id="login-title">はじめる</div>
+      <div class="login-sub" id="login-sub">学校コードと情報を入力してください</div>
+
+      <!-- 通常モード：school/grade/class を手入力 -->
+      <div id="login-full-fields">
+        <div class="fg">
+          <label class="form-lbl">学校コード</label>
+          <input type="text" id="school-code" placeholder="例：CHOFU001" style="text-transform:uppercase">
+        </div>
+        <div class="form-row">
+          <div class="fg"><label class="form-lbl">学年</label><input type="number" id="grade" min="1" max="6" placeholder="2"></div>
+          <div class="fg"><label class="form-lbl">クラス</label><input type="number" id="class-num" min="1" max="20" placeholder="3"></div>
+          <div class="fg"><label class="form-lbl">出席番号</label><input type="number" id="student-num" min="1" max="50" placeholder="6"></div>
+        </div>
       </div>
-      <div class="form-row">
-        <div class="fg"><label class="form-lbl">学年</label><input type="number" id="grade" min="1" max="6" placeholder="2"></div>
-        <div class="fg"><label class="form-lbl">クラス</label><input type="number" id="class-num" min="1" max="20" placeholder="3"></div>
-        <div class="fg"><label class="form-lbl">出席番号</label><input type="number" id="student-num" min="1" max="50" placeholder="6"></div>
+
+      <!-- デモモード：school/grade/class はURL固定、出席番号だけ入力 -->
+      <div id="login-demo-fields" style="display:none">
+        <div class="fg">
+          <label class="form-lbl">出席番号</label>
+          <input type="number" id="student-num-demo" min="1" max="50" placeholder="1">
+        </div>
       </div>
+
       <div class="fg">
         <label class="form-lbl">ニックネーム <span>表示名・自由に決めてOK</span></label>
         <input type="text" id="nickname" placeholder="例：むた" maxlength="20">
@@ -780,6 +793,30 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 </div><!-- /wrap -->
 
 <script>
+// ── URLパラメータ読み取り（デモモード） ──
+let DEMO_PARAMS = null;
+(function(){
+  const p = new URLSearchParams(location.search);
+  const sc = p.get('school');
+  const gr = p.get('grade');
+  const cl = p.get('class');
+  if(sc && gr && cl){
+    DEMO_PARAMS = {school: sc.toUpperCase(), grade: parseInt(gr), class_num: parseInt(cl)};
+  }
+})();
+
+function initLoginScreen(){
+  if(!DEMO_PARAMS) return;
+  // デモモード：タイトル変更・フィールド切り替え
+  document.getElementById('login-title').textContent = 'ちゃり検 体験';
+  document.getElementById('login-sub').textContent = '出席番号を入れて、ニックネームを決めてね！';
+  document.getElementById('login-full-fields').style.display = 'none';
+  document.getElementById('login-demo-fields').style.display = 'block';
+  // ニックネームにフォーカス（Suheさんが出席番号を入れたあと渡す想定）
+  setTimeout(()=>document.getElementById('nickname').focus(), 300);
+}
+document.addEventListener('DOMContentLoaded', initLoginScreen);
+
 const SUPABASE_URL='https://hwxreikopltisfoimuzf.supabase.co';
 const SUPABASE_KEY='sb_publishable_IibWbT-1J9MeXGN5XkJfMw_PqsRfgsi';
 
@@ -957,10 +994,19 @@ function diffLabel(b){return b<=-0.5?'やさしい':b<=0.5?'ふつう':'むず�
 
 // ── ログイン ──
 async function login(){
-  const sc=document.getElementById('school-code').value.trim().toUpperCase();
-  const gr=parseInt(document.getElementById('grade').value);
-  const cl=parseInt(document.getElementById('class-num').value);
-  const sn=parseInt(document.getElementById('student-num').value);
+  // デモモードかどうかで入力値の取得先を変える
+  let sc, gr, cl, sn;
+  if(DEMO_PARAMS){
+    sc = DEMO_PARAMS.school;
+    gr = DEMO_PARAMS.grade;
+    cl = DEMO_PARAMS.class_num;
+    sn = parseInt(document.getElementById('student-num-demo').value);
+  } else {
+    sc=document.getElementById('school-code').value.trim().toUpperCase();
+    gr=parseInt(document.getElementById('grade').value);
+    cl=parseInt(document.getElementById('class-num').value);
+    sn=parseInt(document.getElementById('student-num').value);
+  }
   const nk=document.getElementById('nickname').value.trim();
   if(!sc||!gr||!cl||!sn||!nk){showError('すべての項目を入力してください');return}
   showLoading(true);
