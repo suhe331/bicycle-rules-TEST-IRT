@@ -316,6 +316,157 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   font-size:14px;color:var(--muted);padding:1.5rem;text-align:center;
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
 }
+
+/* ── レベルバナー ── */
+.lv-banner{
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+  border-radius:var(--r);padding:16px 20px;color:#fff;
+}
+.lv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.lv-badge{font-size:11px;font-weight:700;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+.lv-name{font-size:18px;font-weight:700;margin-top:2px}
+.lv-exp-row{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.85;margin-bottom:6px}
+.lv-exp-bar{flex:1;height:6px;background:rgba(255,255,255,.25);border-radius:3px;overflow:hidden}
+.lv-exp-fill{height:100%;background:#fff;border-radius:3px;transition:width .6s ease}
+.lv-next{font-size:11px;opacity:.75;text-align:right;margin-top:2px}
+.lv-total-exp{font-size:11px;opacity:.75}
+
+/* ── モード選択 ── */
+.mode-section{margin-bottom:4px}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:14px;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;position:relative;
+  display:flex;flex-direction:column;gap:4px;
+}
+.mode-card:hover:not(.locked){border-color:var(--accent2);box-shadow:0 2px 10px rgba(50,113,216,.12)}
+.mode-card.locked{opacity:.55;cursor:default;filter:grayscale(.3)}
+.mode-icon{font-size:22px;margin-bottom:2px}
+.mode-name{font-size:14px;font-weight:700;color:var(--text)}
+.mode-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.mode-badge{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
+  background:var(--accent-light);color:var(--accent);
+  display:inline-block;margin-top:2px;align-self:flex-start;
+}
+.mode-badge.exp{background:#fff8e1;color:#7c4f00}
+.mode-badge.locked-badge{background:#f0f0f0;color:var(--muted)}
+.lock-icon{position:absolute;top:10px;right:10px;font-size:16px;opacity:.5}
+
+/* ── おすすめカテゴリ ── */
+.recommend-card{
+  background:linear-gradient(135deg,#fff8e1 0%,#fffdf5 100%);
+  border:1.5px solid #f5d77e;border-radius:var(--r);padding:14px 16px;
+  cursor:pointer;transition:box-shadow .15s;
+}
+.recommend-card:hover{box-shadow:0 2px 10px rgba(245,215,126,.4)}
+.recommend-top{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.recommend-label{font-size:11px;font-weight:700;color:#7c4f00;background:#fff3cd;padding:2px 8px;border-radius:20px}
+.recommend-cat{font-size:15px;font-weight:700;color:var(--text)}
+.recommend-sub{font-size:12px;color:var(--muted)}
+.recommend-exp{font-size:12px;font-weight:700;color:#e09b1f;margin-top:4px}
+
+/* ── カテゴリグリッド（ホーム用） ── */
+.home-cats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.home-cat-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--rs);padding:12px;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+.home-cat-card:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(50,113,216,.1)}
+.home-cat-card.sel{border:2px solid var(--accent2);background:var(--accent-light)}
+.hcc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.hcc-name{font-size:13px;font-weight:600;color:var(--text)}
+.hcc-pct{font-size:12px;font-weight:700}
+.hcc-pct.good{color:var(--correct)}
+.hcc-pct.mid{color:#e09b1f}
+.hcc-pct.bad{color:var(--wrong)}
+.hcc-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.hcc-fill{height:100%;border-radius:2px}
+
+/* ── 復習ボタン ── */
+.review-btn{
+  width:100%;padding:12px 16px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  transition:border-color .15s,box-shadow .15s;text-align:left;
+}
+.review-btn:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(50,113,216,.1)}
+.review-icon{font-size:22px}
+.review-text{flex:1}
+.review-title{font-size:14px;font-weight:700;color:var(--text)}
+.review-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.review-badge{font-size:11px;font-weight:700;background:#fff0f0;color:var(--wrong);padding:2px 8px;border-radius:20px;white-space:nowrap}
+
+/* ── 自転車プログレスバー ── */
+.bike-progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px}
+.bike-progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.bike-track{position:relative;height:36px;background:var(--bg);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.bike-road{position:absolute;bottom:0;left:0;right:0;height:4px;background:#c8d8e8}
+.bike-fill{
+  position:absolute;bottom:0;left:0;height:4px;
+  background:linear-gradient(90deg,var(--accent2),#60b0ff);
+  border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+.bike-svg{
+  position:absolute;bottom:4px;
+  transition:left .5s cubic-bezier(.4,0,.2,1);
+  width:36px;height:28px;
+}
+.bike-goal{position:absolute;right:6px;bottom:4px;font-size:18px;line-height:1}
+.bike-streak{font-size:11px;color:#e09b1f;font-weight:700;margin-top:4px;min-height:16px}
+
+/* ── レベルアップ演出 ── */
+.levelup-overlay{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.levelup-overlay.show{opacity:1;pointer-events:auto}
+.levelup-box{
+  background:#fff;border-radius:20px;padding:32px 40px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  transform:scale(.8);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  max-width:320px;width:90%;
+}
+.levelup-overlay.show .levelup-box{transform:scale(1)}
+.levelup-stars{font-size:40px;margin-bottom:8px;animation:spin-stars 1s ease-out}
+@keyframes spin-stars{0%{transform:rotate(-20deg) scale(.5)}100%{transform:rotate(0) scale(1)}}
+.levelup-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.levelup-lv{font-size:48px;font-weight:700;color:var(--accent);letter-spacing:-2px;line-height:1}
+.levelup-name{font-size:18px;font-weight:700;color:var(--text);margin-top:4px;margin-bottom:12px}
+.levelup-unlock{font-size:13px;color:var(--correct);background:var(--correct-light);border-radius:var(--rs);padding:8px 14px;margin-bottom:16px;font-weight:600}
+.levelup-btn{
+  padding:10px 28px;background:var(--accent2);color:#fff;
+  border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;
+}
+.confetti-piece{
+  position:fixed;width:8px;height:8px;border-radius:2px;
+  animation:confetti-fall 1.5s ease-in forwards;
+  pointer-events:none;z-index:10000;
+}
+@keyframes confetti-fall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+
+/* ── EXPバッジ（ドリル中） ── */
+.pts-badge{
+  display:inline-block;font-size:12px;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  background:var(--accent-light);color:var(--accent);margin-top:8px;
+}
+.pts-badge.bonus{background:#fff8e1;color:#7c4f00}
+
+/* ── 結果画面EXP ── */
+.result-exp{
+  font-size:52px;font-weight:700;color:#e09b1f;letter-spacing:-2px;margin-bottom:4px;
+}
+.result-exp-lbl{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
+.result-exp-detail{font-size:12px;color:var(--muted);margin-bottom:1.5rem;line-height:1.8}
 </style>
 </head>
 <body>
@@ -361,8 +512,31 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 
 <!-- ── ホーム ── -->
 <div class="screen" id="screen-home">
+
+  <!-- レベルバナー -->
+  <div class="lv-banner">
+    <div class="lv-top">
+      <div>
+        <div class="lv-badge" id="lv-badge">Lv.1</div>
+        <div class="lv-name" id="lv-name">見習いライダー 🚲</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:22px;font-weight:700;letter-spacing:-1px" id="lv-exp-disp">0</div>
+        <div class="lv-total-exp">累積 EXP</div>
+      </div>
+    </div>
+    <div class="lv-exp-row">
+      <span id="lv-exp-cur">0</span>
+      <div class="lv-exp-bar"><div class="lv-exp-fill" id="lv-exp-fill" style="width:0%"></div></div>
+      <span id="lv-exp-max">500</span>
+    </div>
+    <div class="lv-next" id="lv-next">次のレベルまで 500 EXP</div>
+  </div>
+
+  <!-- イベント -->
   <div id="event-area"></div>
 
+  <!-- スコアバナー -->
   <div class="score-banner" id="score-banner" style="display:none">
     <div>
       <div class="score-lbl">あなたのスコア</div>
@@ -388,13 +562,76 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
     </div>
   </div>
 
+  <!-- ランキング -->
   <div class="ranking-card" id="ranking-area" style="display:none">
     <div class="card-title">🏆 ランキング（<span id="class-label"></span>）</div>
     <div class="cat-tabs" id="rank-tabs"></div>
     <div id="rank-list"></div>
   </div>
 
-  <!-- レベル選択：イベントのfixed_level適用時のみ表示 -->
+  <!-- モード選択 -->
+  <div class="mode-section">
+    <div class="sec-lbl">モードを選ぶ</div>
+    <div class="mode-grid">
+      <div class="mode-card" id="mode-normal" onclick="selectMode('normal')">
+        <div class="mode-icon">🎯</div>
+        <div class="mode-name">通常ドリル</div>
+        <div class="mode-desc">7問・カテゴリ選択あり</div>
+        <div class="mode-badge">Lv.1〜</div>
+      </div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')">
+        <div class="mode-icon">🔁</div>
+        <div class="mode-name">復習モード</div>
+        <div class="mode-desc">まちがえた問題を集中練習</div>
+        <div class="mode-badge exp" id="review-badge">Lv.2〜解放</div>
+      </div>
+      <div class="mode-card" id="mode-long" onclick="selectMode('long')">
+        <div class="mode-icon">🏃</div>
+        <div class="mode-name">長距離ドリル</div>
+        <div class="mode-desc">15問・EXP 1.2倍</div>
+        <div class="mode-badge exp" id="long-badge">Lv.3〜解放</div>
+      </div>
+      <div class="mode-card" id="mode-endless" onclick="selectMode('endless')">
+        <div class="mode-icon">♾️</div>
+        <div class="mode-name">エンドレス</div>
+        <div class="mode-desc">自分でやめるまで挑戦！</div>
+        <div class="mode-badge exp" id="endless-badge">Lv.4〜解放</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 復習ボタン（復習モード選択時） -->
+  <div id="review-info" style="display:none">
+    <button class="review-btn" onclick="startDrill()">
+      <div class="review-icon">🔁</div>
+      <div class="review-text">
+        <div class="review-title">まちがえた問題を復習する</div>
+        <div class="review-sub" id="review-sub">過去の不正解問題を練習</div>
+      </div>
+      <div class="review-badge" id="review-count-badge">0問</div>
+    </button>
+  </div>
+
+  <!-- おすすめカテゴリ -->
+  <div id="recommend-area" style="display:none">
+    <div class="sec-lbl">✨ 今日のおすすめ（EXP 1.5倍）</div>
+    <div class="recommend-card" id="recommend-card" onclick="selectRecommend()">
+      <div class="recommend-top">
+        <div class="recommend-label">苦手を克服</div>
+        <div class="recommend-cat" id="recommend-cat-name">—</div>
+      </div>
+      <div class="recommend-sub" id="recommend-sub">正答率を計算中...</div>
+      <div class="recommend-exp">⚡ このカテゴリを選ぶと EXP 1.5倍！</div>
+    </div>
+  </div>
+
+  <!-- カテゴリ選択（通常・長距離モード時） -->
+  <div id="cat-select-area" style="display:none">
+    <div class="sec-lbl">カテゴリを選ぶ</div>
+    <div class="home-cats-grid" id="home-cats-grid"></div>
+  </div>
+
+  <!-- fixed_level表示（イベントで固定中のみ） -->
   <div id="lv-area" style="display:none">
     <div class="sec-lbl">レベル（イベントで固定中）</div>
     <div class="lv-row" id="lv-row">
@@ -405,19 +642,48 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
     </div>
   </div>
 
-  <button class="btn-big" onclick="startDrill()">
+  <button class="btn-big" onclick="startDrill()" id="btn-start-drill">
     ▶ ドリルをはじめる
   </button>
 </div>
 
 <!-- ── ドリル ── -->
 <div class="screen" id="screen-drill">
-  <div>
-    <div class="progress-meta">
+  <div class="bike-progress-wrap">
+    <div class="bike-progress-meta">
       <span id="progress-text">1問目</span>
-      <span id="progress-pct">理解度を測定中...</span>
+      <span id="progress-pct">スタート！</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="bike-track">
+      <div class="bike-road"></div>
+      <div class="bike-fill" id="bike-fill" style="width:0%"></div>
+      <svg class="bike-svg" id="bike-svg" style="left:0px" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 後輪 -->
+        <circle cx="8" cy="22" r="5.5" stroke="#17288B" stroke-width="2" fill="white"/>
+        <circle cx="8" cy="22" r="1.5" fill="#17288B"/>
+        <!-- 前輪 -->
+        <circle cx="28" cy="22" r="5.5" stroke="#17288B" stroke-width="2" fill="white"/>
+        <circle cx="28" cy="22" r="1.5" fill="#17288B"/>
+        <!-- フレーム -->
+        <line x1="8" y1="22" x2="18" y2="10" stroke="#3271d8" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18" y1="10" x2="28" y2="22" stroke="#3271d8" stroke-width="2" stroke-linecap="round"/>
+        <line x1="8" y1="22" x2="22" y2="16" stroke="#3271d8" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- サドル -->
+        <line x1="16" y1="10" x2="20" y2="10" stroke="#17288B" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18" y1="10" x2="18" y2="14" stroke="#17288B" stroke-width="1.5"/>
+        <!-- ハンドル -->
+        <line x1="26" y1="12" x2="30" y2="12" stroke="#17288B" stroke-width="2" stroke-linecap="round"/>
+        <line x1="28" y1="12" x2="28" y2="16" stroke="#17288B" stroke-width="1.5"/>
+        <!-- ペダル（アニメーション） -->
+        <circle cx="18" cy="18" r="2" fill="#e09b1f"/>
+        <line x1="18" y1="18" x2="22" y2="20" stroke="#e09b1f" stroke-width="1.5" stroke-linecap="round" id="pedal-line"/>
+        <!-- ライダー -->
+        <circle cx="20" cy="7" r="3" fill="#17288B"/>
+        <line x1="20" y1="10" x2="18" y2="14" stroke="#17288B" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="bike-goal">🏁</div>
+    </div>
+    <div class="bike-streak" id="bike-streak"></div>
   </div>
 
   <div class="q-card">
@@ -449,7 +715,8 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
         <div class="pts-badge" id="pts-badge" style="display:none"></div>
       </div>
     </div>
-    <div class="nav-area">
+    <div class="nav-area" style="gap:8px">
+      <button class="btn-next" id="btn-stop-endless" onclick="stopEndless()" style="display:none;background:var(--muted)">✋ ここでやめる</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次の問題 →</button>
     </div>
   </div>
@@ -459,10 +726,11 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 <div class="screen" id="screen-result">
   <div class="card">
     <div class="result-wrap">
-      <div class="result-title">ドリル完了！</div>
+      <div class="result-title" id="result-title">ドリル完了！</div>
       <div class="result-sub" id="result-sub"></div>
-      <div class="result-score" id="result-score">+0</div>
-      <div class="result-score-lbl">今回の獲得ポイント</div>
+      <div class="result-exp" id="result-score">+0</div>
+      <div class="result-exp-lbl">獲得 EXP</div>
+      <div class="result-exp-detail" id="result-exp-detail"></div>
       <div class="result-stats">
         <div class="stat-box"><div class="stat-val" id="res-correct">0/0</div><div class="stat-lbl">正解/問題数</div></div>
         <div class="stat-box"><div class="stat-val" id="res-pct">0%</div><div class="stat-lbl">正答率</div></div>
@@ -473,15 +741,50 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   </div>
 </div>
 
+<!-- レベルアップ演出 -->
+<div class="levelup-overlay" id="levelup-overlay">
+  <div class="levelup-box">
+    <div class="levelup-stars">⭐🌟⭐</div>
+    <div class="levelup-title">Level Up!</div>
+    <div class="levelup-lv" id="lu-lv">2</div>
+    <div class="levelup-name" id="lu-name">安全ライダー 🚴</div>
+    <div class="levelup-unlock" id="lu-unlock">🔓 復習モードが解放されました！</div>
+    <button class="levelup-btn" onclick="closeLevelUp()">やった！</button>
+  </div>
+</div>
+
 </div><!-- /wrap -->
 
 <script>
 const SUPABASE_URL='https://hwxreikopltisfoimuzf.supabase.co';
 const SUPABASE_KEY='sb_publishable_IibWbT-1J9MeXGN5XkJfMw_PqsRfgsi';
-// SE終了方式：SE < SE_THRESHOLD になったら終了
-const SE_THRESHOLD = 0.35;
-const DRILL_MIN = 5;   // 最低問題数
-const DRILL_MAX = 20;  // 最大問題数
+
+// ── SE設定 ──
+const SE_THRESHOLD = 0.40;
+const DRILL_MIN = 3;
+
+// ── レベル設定 ──
+const LEVELS=[
+  {lv:1,name:'見習いライダー 🚲',    expNeeded:0,    nextExp:500,  unlock:'通常ドリル'},
+  {lv:2,name:'安全ライダー 🚴',      expNeeded:500,  nextExp:1500, unlock:'復習モードが解放されました！'},
+  {lv:3,name:'ルールマスター 🏅',    expNeeded:1500, nextExp:3500, unlock:'長距離ドリル（15問）が解放されました！'},
+  {lv:4,name:'交通安全の達人 🎖️',   expNeeded:3500, nextExp:7000, unlock:'エンドレスモードが解放されました！'},
+  {lv:5,name:'ちゃり検レジェンド 👑',expNeeded:7000, nextExp:null, unlock:'全モード解放済み！'},
+];
+function getLevelInfo(exp){
+  let cur=LEVELS[0];
+  for(const l of LEVELS){ if(exp>=l.expNeeded) cur=l; }
+  return cur;
+}
+
+// ── モード設定 ──
+// mode: 'normal'=7問, 'review'=復習, 'long'=15問, 'endless'=無制限
+const MODE_CONFIG={
+  normal: {maxQ:7,  expMult:1.0, minQ:3},
+  review: {maxQ:7,  expMult:1.3, minQ:3},
+  long:   {maxQ:15, expMult:1.2, minQ:5},
+  endless:{maxQ:999,expMult:1.1, minQ:1},
+};
 
 const CATS=[
   {name:'走行ルール',color:'#3271d8',cnt:6},
@@ -590,6 +893,9 @@ let currentUser=null,currentEvent=null,eventScore=null;
 let questions=[],questionPool=[],currentIdx=0,answered=false;
 let theta=0,se=1.0,correctCount=0,totalAnswered=0,sessionPoints=0;
 let selectedCat='all',selectedLevel='all';
+let currentMode='normal',expMultiplier=1.0,isRecommendCat=false;
+let streakCount=0,wrongQuestionIds=[];
+let bikeAnimFrame=null;
 
 function api(path,opts={}){
   return fetch(SUPABASE_URL+path,{...opts,headers:{
@@ -602,11 +908,14 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classL
 function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000)}
 function showLoading(v){document.getElementById('loading').style.display=v?'block':'none'}
 
-function calcPoints(a,b,th,correct){
+function calcEXP(a,b,th,correct){
   const p=1/(1+Math.exp(-1.7*a*(th-b)));
   const info=1.7*1.7*a*a*p*(1-p);
-  return correct?Math.round(info*100):Math.round(info*30);
+  const base=correct?Math.round(info*100):Math.round(info*20);
+  return Math.round(base*expMultiplier*(isRecommendCat?1.5:1.0));
 }
+// 後方互換
+function calcPoints(a,b,th,correct){ return calcEXP(a,b,th,correct); }
 function updateTheta(th,a,b,correct){
   const p=1/(1+Math.exp(-1.7*a*(th-b)));
   const info=1.7*1.7*a*a*p*(1-p);
@@ -658,8 +967,166 @@ async function goHome(){
   document.getElementById('user-row').style.display='flex';
   document.getElementById('user-name-disp').textContent=currentUser.nickname+' さん';
   document.getElementById('user-avatar').textContent=currentUser.nickname[0];
+  renderLevelBanner();
+  renderModeCards();
   await loadEvent();
+  await loadCatStats();
+  renderRecommend();
   showScreen('screen-home');
+}
+
+// ── レベルバナー描画 ──
+function renderLevelBanner(){
+  const exp=currentUser.total_exp||0;
+  const lv=getLevelInfo(exp);
+  const nextLv=LEVELS.find(l=>l.lv===lv.lv+1);
+  document.getElementById('lv-badge').textContent='Lv.'+lv.lv;
+  document.getElementById('lv-name').textContent=lv.name;
+  document.getElementById('lv-exp-disp').textContent=exp.toLocaleString();
+  if(nextLv){
+    const cur=exp-lv.expNeeded;
+    const need=nextLv.expNeeded-lv.expNeeded;
+    const pct=Math.min(100,Math.round(cur/need*100));
+    document.getElementById('lv-exp-cur').textContent=cur;
+    document.getElementById('lv-exp-max').textContent=need;
+    document.getElementById('lv-exp-fill').style.width=pct+'%';
+    document.getElementById('lv-next').textContent='次のレベルまで '+(need-cur)+' EXP';
+  }else{
+    document.getElementById('lv-exp-fill').style.width='100%';
+    document.getElementById('lv-next').textContent='🎉 最高レベル到達！';
+  }
+}
+
+// ── モードカード描画 ──
+function renderModeCards(){
+  const exp=currentUser.total_exp||0;
+  const lv=getLevelInfo(exp).lv;
+  const modes=['normal','review','long','endless'];
+  const lvReqs={normal:1,review:2,long:3,endless:4};
+  const unlockTexts={normal:'Lv.1〜',review:'Lv.2〜解放 🔓',long:'Lv.3〜解放 🔓',endless:'Lv.4〜解放 🔓'};
+  modes.forEach(m=>{
+    const card=document.getElementById('mode-'+m);
+    const badge=document.getElementById(m+'-badge')||card.querySelector('.mode-badge');
+    const unlocked=lv>=lvReqs[m];
+    card.classList.toggle('locked',!unlocked);
+    if(badge){badge.textContent=unlocked?['Lv.1〜','EXP 1.3倍 🔁','15問・EXP 1.2倍','無制限・EXP 1.1倍'][modes.indexOf(m)]:unlockTexts[m];}
+    if(!unlocked&&!card.querySelector('.lock-icon')){
+      const lk=document.createElement('div');lk.className='lock-icon';lk.textContent='🔒';card.appendChild(lk);
+    }
+  });
+  // デフォルト選択
+  selectMode(currentMode,false);
+}
+
+let catStats={};
+async function loadCatStats(){
+  if(!currentUser)return;
+  try{
+    // 過去の回答からカテゴリ別正答率を取得
+    const res=await api('/rest/v1/event_responses?student_id=eq.'+currentUser.id+'&select=category,is_correct');
+    const data=await res.json();
+    catStats={};
+    if(Array.isArray(data)){
+      data.forEach(r=>{
+        if(!catStats[r.category])catStats[r.category]={correct:0,total:0};
+        catStats[r.category].total++;
+        if(r.is_correct)catStats[r.category].correct++;
+      });
+    }
+    // 不正解問題IDを取得
+    const res2=await api('/rest/v1/event_responses?student_id=eq.'+currentUser.id+'&is_correct=eq.false&select=question_id&limit=100');
+    const d2=await res2.json();
+    wrongQuestionIds=[...new Set((d2||[]).map(r=>r.question_id))];
+    document.getElementById('review-count-badge').textContent=wrongQuestionIds.length+'問';
+    document.getElementById('review-sub').textContent=wrongQuestionIds.length>0?`${wrongQuestionIds.length}問たまっています`:'まだまちがえた問題はありません';
+  }catch(e){console.error(e)}
+}
+
+function renderRecommend(){
+  const area=document.getElementById('recommend-area');
+  // 正答率が最も低いカテゴリを探す
+  let worstCat=null,worstPct=101;
+  for(const [cat,st] of Object.entries(catStats)){
+    if(st.total>=3){
+      const pct=st.correct/st.total*100;
+      if(pct<worstPct){worstPct=pct;worstCat=cat;}
+    }
+  }
+  if(!worstCat){area.style.display='none';return;}
+  area.style.display='block';
+  document.getElementById('recommend-cat-name').textContent=worstCat;
+  document.getElementById('recommend-sub').textContent=`あなたの正答率 ${Math.round(worstPct)}%　重点的に練習しよう！`;
+  area._recommendCat=worstCat;
+}
+
+function selectRecommend(){
+  const area=document.getElementById('recommend-area');
+  const cat=area._recommendCat;
+  if(!cat)return;
+  selectedCat=cat;
+  isRecommendCat=true;
+  // カテゴリカードを選択状態に
+  document.querySelectorAll('.home-cat-card').forEach(c=>{
+    c.classList.toggle('sel',c.dataset.cat===cat);
+  });
+  // おすすめカードを強調
+  document.getElementById('recommend-card').style.border='2px solid #e09b1f';
+}
+
+function renderHomeCats(cats){
+  const grid=document.getElementById('home-cats-grid');
+  grid.innerHTML='';
+  cats.forEach(c=>{
+    const st=catStats[c.name]||{correct:0,total:0};
+    const pct=st.total>0?Math.round(st.correct/st.total*100):-1;
+    const pctClass=pct<0?'mid':pct>=70?'good':pct>=50?'mid':'bad';
+    const pctText=pct<0?'未挑戦':pct+'%';
+    const fillW=pct<0?0:pct;
+    const card=document.createElement('div');
+    card.className='home-cat-card'+(selectedCat===c.name?' sel':'');
+    card.dataset.cat=c.name;
+    card.innerHTML=`<div class="hcc-top"><div class="hcc-name">${c.name}</div><div class="hcc-pct ${pctClass}">${pctText}</div></div><div class="hcc-bar"><div class="hcc-fill" style="width:${fillW}%;background:${c.color}"></div></div>`;
+    card.onclick=()=>{
+      selectedCat=selectedCat===c.name?'all':c.name;
+      isRecommendCat=false;
+      document.getElementById('recommend-card').style.border='';
+      document.querySelectorAll('.home-cat-card').forEach(el=>el.classList.remove('sel'));
+      if(selectedCat!=='all')card.classList.add('sel');
+    };
+    grid.appendChild(card);
+  });
+}
+
+function selectMode(mode,render=true){
+  const exp=currentUser?.total_exp||0;
+  const lv=getLevelInfo(exp).lv;
+  const lvReqs={normal:1,review:2,long:3,endless:4};
+  if(lv<lvReqs[mode])return; // ロック中は無視
+  currentMode=mode;
+  expMultiplier=MODE_CONFIG[mode].expMult;
+  document.querySelectorAll('.mode-card').forEach(c=>c.style.outline='');
+  const sel=document.getElementById('mode-'+mode);
+  if(sel)sel.style.outline='2px solid var(--accent2)';
+  // 復習モード
+  const reviewInfo=document.getElementById('review-info');
+  const catArea=document.getElementById('cat-select-area');
+  const recArea=document.getElementById('recommend-area');
+  if(mode==='review'){
+    reviewInfo.style.display='block';
+    catArea.style.display='none';
+    recArea.style.display='none';
+  }else{
+    reviewInfo.style.display='none';
+    if(render){
+      catArea.style.display='block';
+      renderHomeCats(CATS);
+      renderRecommend();
+    }
+  }
+  // ボタンテキスト
+  const btn=document.getElementById('btn-start-drill');
+  const labels={normal:'▶ ドリルをはじめる',review:'🔁 復習をはじめる',long:'🏃 長距離ドリルをはじめる',endless:'♾️ エンドレスをはじめる'};
+  if(btn)btn.textContent=labels[mode]||'▶ はじめる';
 }
 
 function renderCats(){
@@ -840,25 +1307,47 @@ async function loadRanking(catFilter){
 async function startDrill(){
   showLoading(true);
   try{
-    const url=`/rest/v1/questions?status=eq.active&limit=200&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`;
-    const res=await api(url);
-    let data=await res.json();
-    if(selectedLevel!=='all'){
-      data=data.filter(q=>selectedLevel==='easy'?q.irt_b<=-0.5:selectedLevel==='mid'?q.irt_b>-0.5&&q.irt_b<=0.5:q.irt_b>0.5);
+    const cfg=MODE_CONFIG[currentMode];
+    let data;
+    if(currentMode==='review'){
+      // 復習モード：不正解問題を優先
+      if(wrongQuestionIds.length===0){showError('まちがえた問題がありません。通常ドリルで練習しよう！');showLoading(false);return;}
+      const ids=wrongQuestionIds.slice(0,20).join(',');
+      const res=await api(`/rest/v1/questions?id=in.(${ids})&status=eq.active&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`);
+      data=await res.json();
+    }else{
+      const url=`/rest/v1/questions?status=eq.active&limit=200&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`;
+      const res=await api(url);
+      data=await res.json();
+      if(selectedLevel!=='all'){
+        data=data.filter(q=>selectedLevel==='easy'?q.irt_b<=-0.5:selectedLevel==='mid'?q.irt_b>-0.5&&q.irt_b<=0.5:q.irt_b>0.5);
+      }
     }
-    if(data.length===0){showError('条件に合う問題が見つかりませんでした');showLoading(false);return}
-    // プールをシャッフル（ランダム性を加えつつFisher情報量で選択）
-    data.sort(()=>Math.random()-0.5);
-    questionPool=data;
+    if(data.length===0){showError('条件に合う問題が見つかりませんでした');showLoading(false);return;}
+
+    // カテゴリフィルター（全問のうち選択カテゴリ約70%・他30%）
+    if(selectedCat!=='all'&&currentMode!=='review'){
+      const catQs=data.filter(q=>q.category===selectedCat);
+      const otherQs=data.filter(q=>q.category!==selectedCat);
+      catQs.sort(()=>Math.random()-0.5);
+      otherQs.sort(()=>Math.random()-0.5);
+      // 選択カテゴリ70%、他30%の比率でプールを構成
+      const catN=Math.ceil(cfg.maxQ*0.7);
+      const othN=cfg.maxQ-catN;
+      questionPool=[...catQs,...otherQs.slice(0,othN*3)];
+    }else{
+      data.sort(()=>Math.random()-0.5);
+      questionPool=data;
+    }
+
     questions=[];
-    currentIdx=0;correctCount=0;totalAnswered=0;sessionPoints=0;
-    se=1.0; // SE初期値
-    // 最初の問題をFisher情報量最大で選択
+    currentIdx=0;correctCount=0;totalAnswered=0;sessionPoints=0;streakCount=0;
+    se=1.0;
     pickNextQuestion();
     showLoading(false);
     showScreen('screen-drill');
     renderQuestion();
-  }catch(e){showError('問題の取得に失敗しました');showLoading(false)}
+  }catch(e){showError('問題の取得に失敗しました: '+e.message);showLoading(false)}
 }
 
 // Fisher情報量が最大の問題を選ぶ
@@ -891,22 +1380,44 @@ function calcSE(){
 
 // ドリル終了判定
 function shouldFinish(){
-  if(totalAnswered<DRILL_MIN)return false; // 最低問題数に達していない
-  if(totalAnswered>=DRILL_MAX)return true;  // 最大問題数に達した
+  const cfg=MODE_CONFIG[currentMode];
+  if(totalAnswered<cfg.minQ)return false;
+  if(currentMode==='endless')return false; // エンドレスは手動終了のみ
+  if(totalAnswered>=cfg.maxQ)return true;
   se=calcSE();
-  return se<=SE_THRESHOLD; // SE閾値を下回ったら終了
+  return se<=SE_THRESHOLD;
 }
 
 function renderQuestion(){
   const q=questions[currentIdx];
   answered=false;
-  // SEベースのプログレス：SE 1.0→0.35 を 0%→100% にマッピング
-  const seProgress=Math.min(100,Math.round((1.0-se)/(1.0-SE_THRESHOLD)*100));
-  const seLabel=totalAnswered===0?'理解度を測定中...':`SE: ${se.toFixed(2)}（あと少し！）`;
-  document.getElementById('progress-text').textContent=`${currentIdx+1}問目`;
-  document.getElementById('progress-pct').textContent=
-    totalAnswered>=DRILL_MIN&&se<=SE_THRESHOLD+0.1?'もうすぐ完了！':seLabel;
-  document.getElementById('progress-fill').style.width=seProgress+'%';
+  const cfg=MODE_CONFIG[currentMode];
+  // 自転車プログレス
+  let progress;
+  if(currentMode==='endless'){
+    // エンドレスは問題数でゲージが伸び続ける（50問で満タンイメージ）
+    progress=Math.min(100,Math.round(totalAnswered/50*100));
+  }else{
+    progress=Math.min(100,Math.round(totalAnswered/cfg.maxQ*100));
+  }
+  const trackW=document.querySelector('.bike-track')?.offsetWidth||300;
+  const bikeEl=document.getElementById('bike-svg');
+  const fillEl=document.getElementById('bike-fill');
+  if(bikeEl&&fillEl){
+    fillEl.style.width=progress+'%';
+    const bikeLeft=Math.max(0,Math.min(trackW-42,Math.round((progress/100)*(trackW-42))));
+    bikeEl.style.left=bikeLeft+'px';
+    animatePedal(bikeEl);
+  }
+  // ラベル
+  const progLabels={normal:`${totalAnswered+1} / ${cfg.maxQ}問`,review:`復習 ${totalAnswered+1}問目`,long:`${totalAnswered+1} / ${cfg.maxQ}問`,endless:`${totalAnswered+1}問目（エンドレス）`};
+  document.getElementById('progress-text').textContent=progLabels[currentMode]||`${totalAnswered+1}問目`;
+  const modeLabel=currentMode==='endless'?'やめるときは結果ボタンを押してね':
+    (totalAnswered>=cfg.minQ&&se<=SE_THRESHOLD+0.15?'もうすぐ完了！':'理解度を測定中...');
+  document.getElementById('progress-pct').textContent=modeLabel;
+  // ストリーク表示
+  const streakEl=document.getElementById('bike-streak');
+  if(streakEl) streakEl.textContent=streakCount>=3?`🔥 ${streakCount}問連続正解中！`:'';
   document.getElementById('q-num').textContent=`Q${currentIdx+1}`;
   document.getElementById('cat-badge').textContent=q.category;
   document.getElementById('diff-badge').textContent=diffLabel(q.irt_b);
@@ -983,8 +1494,13 @@ function selectAnswer(idx,q){
   document.getElementById('fb-title').textContent=correct?'正解！':`不正解　正解は「${['ア','イ','ウ','エ'][q.correct_index]}」`;
   document.getElementById('fb-body').textContent=q.explanation;
   document.getElementById('fb-law').textContent=q.law_ref?'📌 '+q.law_ref:'';
+  // ストリーク更新
+  if(correct){streakCount++;if(streakCount>0&&streakCount%3===0)sessionPoints+=50;}
+  else streakCount=0;
+  const isBonus=isRecommendCat||(currentMode==='review');
   const pb=document.getElementById('pts-badge');
-  pb.textContent=`+${pts}pt`;
+  pb.textContent=isBonus?`+${pts} EXP ⚡ボーナス中！`:`+${pts} EXP`;
+  pb.className='pts-badge'+(isBonus?' bonus':'');
   pb.style.display='inline-block';
   if(currentEvent&&currentUser){
     api('/rest/v1/event_responses',{method:'POST',body:JSON.stringify({
@@ -999,6 +1515,9 @@ function selectAnswer(idx,q){
   const bn=document.getElementById('btn-next');
   bn.style.display='block';
   bn.textContent=shouldFinish()?'結果を見る':'次の問題 →';
+  // エンドレスモードは「やめる」ボタンも表示
+  const stopBtn=document.getElementById('btn-stop-endless');
+  if(stopBtn)stopBtn.style.display=currentMode==='endless'?'block':'none';
 }
 
 async function nextQuestion(){
@@ -1007,18 +1526,34 @@ async function nextQuestion(){
     showResult();
     return;
   }
-  // 次の問題をFisher情報量最大で選択
   pickNextQuestion();
   currentIdx++;
   renderQuestion();
 }
+// エンドレスモードの手動終了
+async function stopEndless(){
+  await saveSession();
+  showResult();
+}
 
 async function saveSession(){
   if(currentUser){
+    const oldExp=currentUser.total_exp||0;
+    const newExp=oldExp+sessionPoints;
+    const oldLv=getLevelInfo(oldExp).lv;
+    const newLv=getLevelInfo(newExp).lv;
     await api(`/rest/v1/student_profiles?id=eq.${currentUser.id}`,{
-      method:'PATCH',body:JSON.stringify({theta:parseFloat(theta.toFixed(3)),last_active:new Date().toISOString()})
+      method:'PATCH',
+      body:JSON.stringify({theta:parseFloat(theta.toFixed(3)),total_exp:newExp,level:newLv,last_active:new Date().toISOString()})
     }).catch(e=>console.error(e));
     currentUser.theta=theta;
+    currentUser.total_exp=newExp;
+    currentUser.level=newLv;
+    // レベルアップ判定
+    if(newLv>oldLv){
+      const lvInfo=LEVELS.find(l=>l.lv===newLv);
+      showLevelUp(newLv,lvInfo);
+    }
   }
   if(currentEvent&&currentUser){
     const acc=correctCount/totalAnswered;
@@ -1045,14 +1580,68 @@ async function saveSession(){
 }
 
 function showResult(){
-  const pct=Math.round(correctCount/totalAnswered*100);
+  const pct=Math.round(correctCount/Math.max(totalAnswered,1)*100);
   document.getElementById('res-correct').textContent=`${correctCount}/${totalAnswered}`;
   document.getElementById('res-pct').textContent=pct+'%';
   document.getElementById('res-theta').textContent=theta.toFixed(2);
-  document.getElementById('result-score').textContent='+'+sessionPoints;
-  const comment=pct>=80?'すばらしい！':pct>=60?'まずまずです。':'もう少し練習しましょう。';
+  document.getElementById('result-score').textContent='+'+sessionPoints+' EXP';
+  const comment=pct>=80?'すばらしい！🎉':pct>=60?'まずまずです👍':'もう少し練習しよう💪';
+  const modeNames={normal:'通常ドリル',review:'復習モード',long:'長距離ドリル',endless:'エンドレス'};
+  document.getElementById('result-title').textContent=(modeNames[currentMode]||'ドリル')+'完了！';
   document.getElementById('result-sub').textContent=`${totalAnswered}問回答・正答率 ${pct}%　${comment}`;
+  // EXP内訳
+  const baseExp=Math.round(sessionPoints/(expMultiplier*(isRecommendCat?1.5:1.0)));
+  let detail=`基本EXP: ${baseExp}`;
+  if(expMultiplier!==1.0)detail+=` × ${expMultiplier}（モードボーナス）`;
+  if(isRecommendCat)detail+=' × 1.5（おすすめカテゴリ）';
+  if(streakCount>=3)detail+=` + 連続正解ボーナス`;
+  document.getElementById('result-exp-detail').textContent=detail;
   showScreen('screen-result');
+}
+
+// ── レベルアップ演出 ──
+function showLevelUp(lv,lvInfo){
+  const overlay=document.getElementById('levelup-overlay');
+  document.getElementById('lu-lv').textContent=lv;
+  document.getElementById('lu-name').textContent=lvInfo?.name||'';
+  document.getElementById('lu-unlock').textContent='🔓 '+( lvInfo?.unlock||'新機能が解放されました！');
+  overlay.classList.add('show');
+  spawnConfetti();
+}
+function closeLevelUp(){
+  document.getElementById('levelup-overlay').classList.remove('show');
+}
+function spawnConfetti(){
+  const colors=['#3271d8','#2a9d63','#e09b1f','#d95a5a','#7F77DD','#c45e8a'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[i%colors.length]};animation-delay:${Math.random()*0.8}s;animation-duration:${1.2+Math.random()*0.8}s;transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2500);
+  }
+}
+
+// ── 自転車ペダルアニメーション ──
+let pedalAngle=0;
+function animatePedal(bikeEl){
+  const line=bikeEl.querySelector('#pedal-line');
+  if(!line)return;
+  if(bikeAnimFrame)cancelAnimationFrame(bikeAnimFrame);
+  let start=null;
+  function step(ts){
+    if(!start)start=ts;
+    const elapsed=(ts-start);
+    pedalAngle=(pedalAngle+4)%360;
+    const rad=pedalAngle*Math.PI/180;
+    const cx=18,cy=18,r=3;
+    const x2=Math.round((cx+r*Math.cos(rad))*10)/10;
+    const y2=Math.round((cy+r*Math.sin(rad))*10)/10;
+    line.setAttribute('x2',x2);
+    line.setAttribute('y2',y2);
+    if(elapsed<400)bikeAnimFrame=requestAnimationFrame(step);
+  }
+  bikeAnimFrame=requestAnimationFrame(step);
 }
 
 (async function init(){
