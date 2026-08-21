@@ -34,7 +34,7 @@ h1{margin:0;font-size:30px;color:#17324d}
 .choice:hover{border-color:#3271d8;background:#f7faff}
 .choice.correct{background:#eaf7f0;border-color:#35a46e}
 .choice.wrong{background:#fff0f0;border-color:#d95a5a}
-.feedback{min-height:26px;font-weight:700;margin-top:12px}
+.feedback{min-height:26px;font-weight:600;margin-top:12px;font-size:14px;line-height:1.7}
 .result{display:none;margin-top:18px;padding-top:20px;border-top:1px solid #e4e9ef}
 .result.show{display:block}
 .result h3{margin:0 0 12px;color:#17324d}
@@ -58,9 +58,14 @@ h1{margin:0;font-size:30px;color:#17324d}
 
 <body>
 <header>
-<div class="head">
-<h1>自転車交通安全 18のルール</h1>
-<div class="sub">危険な場面を見て、このあと何が起こるか考えてみよう。</div>
+<div class="head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+  <div>
+    <h1>自転車交通安全 18のルール</h1>
+    <div class="sub">こんなときどうする？！</div>
+  </div>
+  <a href="app.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#17288B;color:#fff;border-radius:10px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap">
+    🚲 ドリルに挑戦する →
+  </a>
 </div>
 </header>
 
@@ -378,23 +383,99 @@ function topicChoices(title){
   return choices[title] || null;
 }
 
+// 各トピックの正解・不正解フィードバック（app.htmlの問題と対応）
+const FEEDBACK = {
+  "信号無視":{
+    ok:"正解！自転車も車両です。赤信号では必ず停止線の手前で止まりましょう。信号無視は青切符（反則金）の対象です。",
+    ng:"あぶない！赤信号は自転車も止まらなければなりません。「人がいないから大丈夫」は通用しません。"
+  },
+  "一時停止":{
+    ok:"正解！一時停止の標識では必ず止まって左右を確認。ゆっくり進むだけでは不十分です。",
+    ng:"あぶない！一時停止の標識は「必ず止まれ」という意味です。速度を落とすだけでは違反になります。"
+  },
+  "右側通行・逆走":{
+    ok:"正解！自転車は車道の左側通行が原則。逆走は正面衝突の危険があります。",
+    ng:"あぶない！車道の右側を走ると、前から来る車と正面衝突する危険があります。必ず左側を走りましょう。"
+  },
+  "歩道での速度":{
+    ok:"正解！歩道では歩行者が最優先。すぐに止まれる速度で徐行しましょう。",
+    ng:"あぶない！歩道での速い走行は歩行者を巻き込む事故につながります。歩行者優先で徐行が必要です。"
+  },
+  "二段階右折":{
+    ok:"正解！自転車の右折は交差点の向こう側の角まで直進してから向きを変える「二段階右折」が原則です。",
+    ng:"あぶない！自転車が車と同じように右折すると、対向車と衝突する危険があります。二段階右折が必要です。"
+  },
+  "スマホながら運転":{
+    ok:"正解！スマホを見るときは必ず止まってから。ながら運転は反則金12,000円の対象です。",
+    ng:"あぶない！走りながらのスマホ操作は前方不注意になります。反則金12,000円の対象にもなります。"
+  },
+  "傘さし運転":{
+    ok:"正解！傘さし運転は法律で禁止されています。雨の日はレインコートを使いましょう。",
+    ng:"あぶない！傘をさしながら走ると片手運転になり、ブレーキ操作が遅れます。法律違反でもあります。"
+  },
+  "イヤホン":{
+    ok:"正解！周囲の音（クラクション・踏切・緊急車両）が聞こえる状態を保ちましょう。",
+    ng:"あぶない！両耳イヤホンは車のクラクションや踏切の音が聞こえなくなる危険な状態です。"
+  },
+  "二人乗り":{
+    ok:"正解！二人乗りは原則禁止。バランスが崩れてブレーキも効きにくくなります。",
+    ng:"あぶない！二人乗りは法律で原則禁止です。バランスが崩れ、急停車ができなくなります。"
+  },
+  "飲酒運転":{
+    ok:"正解！自転車の飲酒運転も法律違反。酒酔い運転は5年以下の懲役または100万円以下の罰金です。",
+    ng:"あぶない！「少しなら大丈夫」は危険な思い込み。自転車の酒酔い運転は重大な犯罪です。"
+  },
+  "並進":{
+    ok:"正解！2台以上並んで走ることは原則禁止。後ろの車が追い越しにくくなり危険です。",
+    ng:"あぶない！並んで走ると車道幅を占有し、後続車との事故リスクが高まります。原則禁止です。"
+  },
+  "ブレーキ点検":{
+    ok:"正解！乗る前の点検は使用者の義務です。ブレーキが壊れたまま走るのは違法です。",
+    ng:"あぶない！整備不良の自転車での事故は自分の責任になります。乗る前の点検を忘れずに。"
+  },
+  "夜間ライト":{
+    ok:"正解！夜間のライト点灯は義務です。早めに点けて車から自分の存在を知らせましょう。",
+    ng:"あぶない！夜間無灯火は法律違反。ドライバーから見えず、衝突される危険があります。"
+  },
+  "荷物の固定":{
+    ok:"正解！荷物は安全に固定しましょう。落下すると後続車の事故原因にもなります。",
+    ng:"あぶない！不安定な荷物はバランスを崩す原因になります。必ず固定してから走りましょう。"
+  },
+  "服装・フットウェア":{
+    ok:"正解！サンダルや裾の長い服は車輪にはさまる危険があります。動きやすい服装で乗りましょう。",
+    ng:"あぶない！サンダルはペダルから滑って車輪に足がはさまる重大事故につながります。"
+  },
+  "ヘルメット":{
+    ok:"正解！2023年4月から全年齢で着用が努力義務になりました。頭を守るために必ずかぶりましょう。",
+    ng:"あぶない！ヘルメットなしの転倒は頭部への重大なダメージにつながります。全年齢で努力義務です。"
+  },
+  "事故対応":{
+    ok:"正解！事故のあとはまず相手の救護、そして警察・救急への連絡が義務です。逃げると「ひき逃げ」になります。",
+    ng:"あぶない！事故後に立ち去ることは「ひき逃げ」という重大な犯罪です。必ず止まって対応しましょう。"
+  },
+  "自転車保険":{
+    ok:"正解！自転車事故で億単位の賠償が必要になった例もあります。多くの自治体で保険加入が義務化されています。",
+    ng:"事故が起きてから後悔しないために、自転車保険への加入を確認しておきましょう。多くの自治体で義務化されています。"
+  }
+};
+
 function answer(j){
  const x=data[cur];
  const bs=document.querySelectorAll(".choice");
  bs.forEach(b=>b.disabled=true);
  const f=document.getElementById("feedback");
  f.classList.remove("good","bad");
+ const fb=FEEDBACK[x[2]]||{ok:"正解！",ng:"あぶない！"};
  if(j===x[8]){
    bs[j].classList.add("correct");
-   f.textContent="正解";
+   f.textContent="✅ "+fb.ok;
    f.classList.add("good");
  }else{
    bs[j].classList.add("wrong");
    bs[x[8]].classList.add("correct");
-   f.textContent="あぶない！";
+   f.textContent="⚠️ "+fb.ng;
    f.classList.add("bad");
  }
- // 回答後に結果画像と教訓を表示
  document.getElementById("result").classList.add("show");
  setTimeout(()=>document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"}),120);
 }
