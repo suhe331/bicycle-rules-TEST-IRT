@@ -352,15 +352,15 @@ async function generate(){
     const memoHint=memo?`\n補足情報：${memo}`:'';
 
     const prompt=`あなたは自転車交通安全教育の専門家です。
-この写真を見て、日本の小学生〜高校生向けの自転車ルール学習問題を1問作成してください。${locationHint}${memoHint}
+この写真を見て、日本の中学生向けの自転車ルール学習問題を1問作成してください。${locationHint}${memoHint}
 
 写真から読み取れる交通環境（交差点、標識、信号、歩道、停止線、矢印信号など）を分析し、
 その場所に即したリアルな問題を作ってください。
 
-以下のJSON形式のみで回答してください（他のテキスト不要）：
+以下のJSON形式のみで回答してください（マークダウンや\`\`\`は不要）：
 {
-  "question_text": "問題文（写真を見て答えてください、という形式で）",
-  "choices": ["選択肢ア", "選択肢イ", "選択肢ウ", "選択肢エ"],
+  "question_text": "この行動がまねく、一番危険な結果はどれ？（または写真の状況に即した問いかけ）",
+  "choices": ["選択肢テキストのみ（記号なし）", "選択肢テキストのみ（記号なし）", "選択肢テキストのみ（記号なし）"],
   "correct_index": 0,
   "explanation": "解説文（なぜその答えになるかを100字程度で）",
   "law_ref": "関連する法令（道交法第○条など）",
@@ -371,9 +371,12 @@ async function generate(){
 }
 
 重要なルール：
-- 正解の選択肢が他より長くならないようにする
+- 選択肢は必ず3つ（choicesの配列は3要素のみ）
+- 選択肢テキストに「ア：」「イ：」「ウ：」などの記号を絶対に含めない
+- 正解の選択肢が他より長くならないようにする（長さをそろえる）
+- 不正解の選択肢は「もっともらしい惜しい間違い」にする（明らかな間違いはNG）
 - 写真の内容に直接関係する問題にする
-- 小学生でも読める平易な言葉を使う（難しい用語は※で注釈）`;
+- 中学生でも読める平易な言葉を使う`;
 
     const response = await fetch('/api/generate', {
       method:'POST',
@@ -393,12 +396,10 @@ async function generate(){
     const clean=text.replace(/```json|```/g,'').trim();
     generatedData=JSON.parse(clean);
 
-    // 選択肢をシャッフルして正解インデックスを更新
-    const choices=generatedData.choices;
-    const correctChoice=choices[generatedData.correct_index];
-    const shuffled=[...choices].sort(()=>Math.random()-0.5);
-    generatedData.choices=shuffled;
-    generatedData.correct_index=shuffled.indexOf(correctChoice);
+    // 選択肢テキストの先頭記号を除去（「ア：」「ア.」などが混入した場合の保険）
+    generatedData.choices=generatedData.choices.map(c=>
+      c.replace(/^[アイウエオ][:：.．]\s*/,'').trim()
+    );
 
     clearInterval(timer);
     renderResult(generatedData);
@@ -453,7 +454,7 @@ async function approve(){
     uploadedUrl=await uploadImage();
 
     // 2. 選択肢・正解を取得
-    const choices=Array.from({length:4},(_,i)=>document.getElementById(`choice-${i}`)?.value||'').filter(Boolean);
+    const choices=Array.from({length:3},(_,i)=>document.getElementById(`choice-${i}`)?.value||'').filter(Boolean);
     const correctIndex=parseInt(document.getElementById('choices-edit').dataset.correct||'0');
     const expl=document.getElementById('result-expl').value;
     const law=document.getElementById('result-law').value;
