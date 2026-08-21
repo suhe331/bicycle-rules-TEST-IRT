@@ -839,7 +839,7 @@ const ILLUST_MAP = [
   {keys:['飲酒','お酒','酒酔い'],                        file:'fig16.png'},
   {keys:['信号を無視','信号無視','赤信号を'],            file:'fig13.png'},
   // 走行場所・方向系
-  {keys:['二段階右折','右折するとき'],                   file:'fig37.png'},
+  {keys:['二段階右折','右折するとき'],                   file:'fig11.png'},
   {keys:['歩道を自転車','歩道で歩行者'],                 file:'fig10.png'},
   {keys:['並んで走','2台並','並進'],                     file:'fig11.png'},
   {keys:['道路の左側','車道の左','どこを走'],            file:'fig11.png'},
@@ -1526,7 +1526,13 @@ async function nextQuestion(){
     showResult();
     return;
   }
-  pickNextQuestion();
+  const next=pickNextQuestion();
+  if(!next){
+    // プールが尽きた場合も終了
+    await saveSession();
+    showResult();
+    return;
+  }
   currentIdx++;
   renderQuestion();
 }
