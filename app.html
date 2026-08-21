@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -21,6 +21,8 @@
   --accent-yellow-dark:#A59837;
   --accent-purple:#7A3D5D;
   --accent-teal:#3D737A;
+  --accent-orange:#FF6B00;
+  --accent-orange-light:#FFF3ED;
   --correct:#3D737A;
   --correct-light:#e8f4f5;
   --wrong:#d95a5a;
@@ -123,11 +125,11 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
 }
 .score-lbl{font-size:12px;color:var(--muted);margin-bottom:4px}
-.score-num{font-size:36px;font-weight:700;color:var(--accent-purple);letter-spacing:-1px;line-height:1}
+.score-num{font-size:36px;font-weight:700;color:var(--accent);letter-spacing:-1px;line-height:1}
 .score-max{font-size:13px;color:var(--muted);font-weight:400}
 .score-rank{
-  font-size:12px;color:#A59837;margin-top:6px;font-weight:600;
-  background:#FADD00;display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:12px;color:#fff;margin-top:6px;font-weight:700;
+  background:var(--accent-orange);display:inline-block;padding:3px 10px;border-radius:20px;
 }
 .sb-rows{display:flex;flex-direction:column;gap:8px}
 .sb-row{display:flex;align-items:center;gap:8px}
@@ -327,7 +329,6 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 .lv-banner{
   background:var(--accent);
   border-radius:var(--r);padding:16px 20px;color:#fff;
-  border:3px solid var(--accent-purple);
 }
 .lv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .lv-badge{font-size:11px;font-weight:700;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;letter-spacing:.04em}
@@ -358,22 +359,26 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   display:inline-block;margin-top:2px;align-self:flex-start;
   border:1px solid var(--accent);
 }
-.mode-badge.exp{background:#FADD00;color:#A59837;border-color:#A59837}
+.mode-badge.exp{background:var(--accent-orange-light);color:var(--accent-orange);border-color:var(--accent-orange)}
 .mode-badge.locked-badge{background:#f0f0f0;color:var(--muted)}
 .lock-icon{position:absolute;top:10px;right:10px;font-size:16px;opacity:.5}
 
 /* ── おすすめカテゴリ ── */
 .recommend-card{
-  background:#FADD00;
-  border:3px solid #A59837;border-radius:var(--r);padding:14px 16px;
-  cursor:pointer;transition:opacity .15s;
+  background:var(--surface);
+  border-left:4px solid var(--accent-orange);
+  border-top:0.5px solid var(--border);
+  border-right:0.5px solid var(--border);
+  border-bottom:0.5px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  cursor:pointer;transition:box-shadow .15s;
 }
-.recommend-card:hover{opacity:.88}
+.recommend-card:hover{box-shadow:0 2px 12px rgba(255,107,0,.12)}
 .recommend-top{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.recommend-label{font-size:11px;font-weight:700;color:#fff;background:#A59837;padding:2px 8px;border-radius:20px}
-.recommend-cat{font-size:15px;font-weight:700;color:#2a1f2e}
-.recommend-sub{font-size:12px;color:#7A3D5D;font-weight:600}
-.recommend-exp{font-size:12px;font-weight:700;color:#7A3D5D;margin-top:4px}
+.recommend-label{font-size:11px;font-weight:700;color:#fff;background:var(--accent-orange);padding:2px 8px;border-radius:20px}
+.recommend-cat{font-size:15px;font-weight:700;color:var(--text)}
+.recommend-sub{font-size:12px;color:var(--muted)}
+.recommend-exp{font-size:12px;font-weight:700;color:var(--accent-orange);margin-top:4px}
 
 /* ── カテゴリグリッド（ホーム用） ── */
 .home-cats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
@@ -424,7 +429,7 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   width:36px;height:28px;
 }
 .bike-goal{position:absolute;right:6px;bottom:4px;font-size:18px;line-height:1}
-.bike-streak{font-size:11px;color:var(--accent);font-weight:700;margin-top:4px;min-height:16px}
+.bike-streak{font-size:11px;color:var(--accent-orange);font-weight:700;margin-top:4px;min-height:16px}
 
 /* ── レベルアップ演出 ── */
 .levelup-overlay{
@@ -467,11 +472,11 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   padding:3px 10px;border-radius:20px;
   background:var(--accent-cyan-light);color:var(--accent-teal);margin-top:8px;border:1px solid var(--accent-cyan);
 }
-.pts-badge.bonus{background:#FADD00;color:#A59837;border-color:#A59837}
+.pts-badge.bonus{background:var(--accent-orange-light);color:var(--accent-orange);border-color:var(--accent-orange)}
 
 /* ── 結果画面EXP ── */
 .result-exp{
-  font-size:52px;font-weight:700;color:var(--accent);letter-spacing:-2px;margin-bottom:4px;
+  font-size:52px;font-weight:700;color:var(--accent-orange);letter-spacing:-2px;margin-bottom:4px;
 }
 .result-exp-lbl{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
 .result-exp-detail{font-size:12px;color:var(--muted);margin-bottom:1.5rem;line-height:1.8}
@@ -529,7 +534,7 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
         <div class="lv-name" id="lv-name">見習いライダー 🚲</div>
       </div>
       <div style="text-align:right">
-        <div style="font-size:22px;font-weight:700;letter-spacing:-1px" id="lv-exp-disp">0</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-1px;color:#FADD00" id="lv-exp-disp">0</div>
         <div class="lv-total-exp">累積 EXP</div>
       </div>
     </div>
@@ -538,21 +543,21 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
       <div class="lv-exp-bar"><div class="lv-exp-fill" id="lv-exp-fill" style="width:0%"></div></div>
       <span id="lv-exp-max">500</span>
     </div>
-    <div class="lv-next" id="lv-next">次のレベルまで 500 EXP</div>
+    <div class="lv-next" id="lv-next" style="opacity:.8">次のレベルまで 500 EXP</div>
   </div>
 
   <!-- イベント -->
   <div id="event-area"></div>
 
   <!-- 場面で学ぶバナー -->
-  <a href="safety.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#00DDFA;border-radius:12px;text-decoration:none;color:#2a1f2e;border:3px solid #3D737A;transition:opacity .15s;font-weight:700" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+  <a href="safety.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface);border-radius:12px;text-decoration:none;border-left:4px solid #00DDFA;border-top:0.5px solid var(--border);border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border);transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 2px 12px rgba(0,221,250,.15)'" onmouseout="this.style.boxShadow=''">
     <div style="font-size:28px;line-height:1">🚦</div>
     <div style="flex:1">
-      <div style="font-size:11px;font-weight:600;opacity:.8;letter-spacing:.08em;margin-bottom:2px">まず読んで学ぼう</div>
-      <div style="font-size:15px;font-weight:700">場面で学ぶ｜自転車交通安全 18のルール</div>
-      <div style="font-size:11px;opacity:.75;margin-top:2px">こんなときどうする？！危険な場面をイラストで確認</div>
+      <div style="font-size:10px;font-weight:700;color:#3D737A;letter-spacing:.06em;margin-bottom:2px">まず読んで学ぼう</div>
+      <div style="font-size:14px;font-weight:700;color:var(--text)">場面で学ぶ｜自転車交通安全 18のルール</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">こんなときどうする？！危険な場面をイラストで確認</div>
     </div>
-    <div style="font-size:18px;color:#7A3D5D;font-weight:700">→</div>
+    <div style="font-size:16px;color:#3D737A;font-weight:700">→</div>
   </a>
 
   <!-- スコアバナー -->
