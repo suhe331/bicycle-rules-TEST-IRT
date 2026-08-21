@@ -394,13 +394,9 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
     <div id="rank-list"></div>
   </div>
 
-  <div>
-    <div class="sec-lbl">カテゴリを選ぶ</div>
-    <div class="cats-grid" id="cats-grid"></div>
-  </div>
-
-  <div>
-    <div class="sec-lbl">レベル</div>
+  <!-- レベル選択：イベントのfixed_level適用時のみ表示 -->
+  <div id="lv-area" style="display:none">
+    <div class="sec-lbl">レベル（イベントで固定中）</div>
     <div class="lv-row" id="lv-row">
       <div class="lv sel" data-lv="all" onclick="selectLevel(this)">すべて</div>
       <div class="lv" data-lv="easy" onclick="selectLevel(this)">やさしい</div>
@@ -410,7 +406,7 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
   </div>
 
   <button class="btn-big" onclick="startDrill()">
-    ▶ 今日の5問をはじめる
+    ▶ ドリルをはじめる
   </button>
 </div>
 
@@ -418,8 +414,8 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 <div class="screen" id="screen-drill">
   <div>
     <div class="progress-meta">
-      <span id="progress-text">1 / 5問</span>
-      <span id="progress-pct">0%</span>
+      <span id="progress-text">1問目</span>
+      <span id="progress-pct">理解度を測定中...</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
   </div>
@@ -468,7 +464,7 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
       <div class="result-score" id="result-score">+0</div>
       <div class="result-score-lbl">今回の獲得ポイント</div>
       <div class="result-stats">
-        <div class="stat-box"><div class="stat-val" id="res-correct">0</div><div class="stat-lbl">正解数</div></div>
+        <div class="stat-box"><div class="stat-val" id="res-correct">0/0</div><div class="stat-lbl">正解/問題数</div></div>
         <div class="stat-box"><div class="stat-val" id="res-pct">0%</div><div class="stat-lbl">正答率</div></div>
         <div class="stat-box"><div class="stat-val" id="res-theta">0.00</div><div class="stat-lbl">理解度 θ</div></div>
       </div>
@@ -482,18 +478,22 @@ input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(5
 <script>
 const SUPABASE_URL='https://hwxreikopltisfoimuzf.supabase.co';
 const SUPABASE_KEY='sb_publishable_IibWbT-1J9MeXGN5XkJfMw_PqsRfgsi';
-const DRILL_SIZE=5;
+// SE終了方式：SE < SE_THRESHOLD になったら終了
+const SE_THRESHOLD = 0.35;
+const DRILL_MIN = 5;   // 最低問題数
+const DRILL_MAX = 20;  // 最大問題数
+
 const CATS=[
-  {name:'走行ルール',color:'#3271d8',cnt:9},
-  {name:'信号機の種類',color:'#e09b1f',cnt:10},
-  {name:'道路標識',color:'#2a9d63',cnt:10},
-  {name:'危険行為禁止',color:'#d95a5a',cnt:8},
-  {name:'走行判断',color:'#7F77DD',cnt:10},
-  {name:'事故対応',color:'#687787',cnt:9},
-  {name:'安全対策',color:'#c45e8a',cnt:8},
-  {name:'青切符・法律',color:'#a05c2a',cnt:8},
-  {name:'自転車マナー',color:'#2a8a9d',cnt:12},
-  {name:'自転車整備・安全',color:'#5a7dd9',cnt:16},
+  {name:'走行ルール',color:'#3271d8',cnt:6},
+  {name:'信号機の種類',color:'#e09b1f',cnt:6},
+  {name:'道路標識',color:'#2a9d63',cnt:6},
+  {name:'危険行為禁止',color:'#d95a5a',cnt:5},
+  {name:'走行判断',color:'#7F77DD',cnt:5},
+  {name:'事故対応',color:'#687787',cnt:3},
+  {name:'安全対策',color:'#c45e8a',cnt:5},
+  {name:'青切符・法律',color:'#a05c2a',cnt:4},
+  {name:'自転車マナー',color:'#2a8a9d',cnt:7},
+  {name:'自転車整備・安全',color:'#5a7dd9',cnt:6},
 ];
 
 // ─── イラストマッピング ───
@@ -527,35 +527,42 @@ const CATS=[
 const ASSETS = 'assets/illust/';
 
 const ILLUST_MAP = [
-  // 信号・交差点系
-  {keys:['信号無視','赤信号'],              file:'fig13.png'},
-  {keys:['一時停止','止まれ','停止線'],     file:'fig17.png'},
-  {keys:['右側通行','逆走'],                file:'fig17.png'},
-  {keys:['二段階右折','右折'],              file:'fig37.png'},
-  // 歩道・走行系
-  {keys:['歩道','歩行者優先'],              file:'fig10.png'},
-  {keys:['並進','並んで走'],                file:'fig11.png'},
-  {keys:['車道の左側','左側を走'],          file:'fig11.png'},
-  // ながら運転系
-  {keys:['スマホ','ながら運転','携帯'],     file:'fig06.png'},
-  {keys:['傘','雨'],                        file:'fig07.png'},
-  {keys:['イヤホン'],                       file:'fig05.png'},
+  // ながら運転系（最優先：問題文に明示）
+  {keys:['スマホ','ながら運転','携帯','スマートフォン'], file:'fig06.png'},
+  {keys:['傘','傘さし','雨の日'],                        file:'fig07.png'},
+  {keys:['イヤホン','ヘッドフォン'],                     file:'fig05.png'},
   // 禁止行為系
-  {keys:['二人乗り','2人'],                 file:'fig36.png'},
-  {keys:['飲酒','お酒','酒'],               file:'fig16.png'},
-  // 整備・安全系
-  {keys:['ブレーキ','制動'],                file:'fig08.png'},
-  {keys:['無灯火'],                         file:'fig19.png'},
-  {keys:['夜間','ライト'],                  file:'fig18.png'},
-  {keys:['荷物','積載','紐'],               file:'fig15.png'},
-  {keys:['サンダル','服装','フットウェア'], file:'fig15.png'},
-  {keys:['ヘルメット'],                     file:'fig15.png'},
-  // 事故・保険系
-  {keys:['事故','衝突','ぶつかった'],       file:'fig14.png'},
-  {keys:['保険'],                           file:'fig17.png'},
+  {keys:['二人乗り','2人乗り','友だちと1台'],            file:'fig36.png'},
+  {keys:['飲酒','お酒','酒酔い'],                        file:'fig16.png'},
+  {keys:['信号を無視','信号無視','赤信号を'],            file:'fig13.png'},
+  // 走行場所・方向系
+  {keys:['二段階右折','右折するとき'],                   file:'fig37.png'},
+  {keys:['歩道を自転車','歩道で歩行者'],                 file:'fig10.png'},
+  {keys:['並んで走','2台並','並進'],                     file:'fig11.png'},
+  {keys:['道路の左側','車道の左','どこを走'],            file:'fig11.png'},
+  {keys:['押しながら渡','押して歩'],                     file:'fig03.png'},
+  {keys:['逆から走','一方通行'],                         file:'fig04.png'},
+  // 夜間・ライト系
+  {keys:['無灯火','ライトをつけず'],                     file:'fig19.png'},
+  {keys:['夜','ライト','反射材','リフレクター'],          file:'fig18.png'},
+  // 整備系
+  {keys:['ブレーキ','タイヤがすり','空気がぺった'],      file:'fig08.png'},
+  {keys:['サンダル','足がペダル'],                       file:'fig15.png'},
+  {keys:['ヘルメット'],                                  file:'fig15.png'},
+  {keys:['荷物','荷台'],                                 file:'fig15.png'},
+  // 事故系
+  {keys:['ぶつかった','ぶつかって','人にぶつか','逃げて','ひき逃げ'], file:'fig14.png'},
+  {keys:['警察','事故後'],                               file:'fig17.png'},
+  // 歩行者優先系
+  {keys:['歩行者が前','歩行者グループ','歩行者のすぐ'],  file:'fig10.png'},
+  {keys:['横断歩道'],                                    file:'fig03.png'},
+  // 信号系
+  {keys:['赤信号','黄色の信号','点滅信号','自転車専用の信号'], file:'fig13.png'},
   // 標識系
-  {keys:['徐行'],                           file:'fig34.png'},
-  {keys:['止まれ','一時停止の標識'],        file:'fig35.png'},
+  {keys:['通行止め','自転車通行可','自転車専用','自動車専用'], file:'fig34.png'},
+  {keys:['止まれ'],                                      file:'fig35.png'},
+  // 青切符系
+  {keys:['青切符','反則金','赤切符'],                    file:'fig13.png'},
 ];
 
 function getIllust(q){
@@ -580,8 +587,8 @@ function getIllust(q){
 }
 
 let currentUser=null,currentEvent=null,eventScore=null;
-let questions=[],currentIdx=0,answered=false;
-let theta=0,correctCount=0,totalAnswered=0,sessionPoints=0;
+let questions=[],questionPool=[],currentIdx=0,answered=false;
+let theta=0,se=1.0,correctCount=0,totalAnswered=0,sessionPoints=0;
 let selectedCat='all',selectedLevel='all';
 
 function api(path,opts={}){
@@ -651,7 +658,6 @@ async function goHome(){
   document.getElementById('user-row').style.display='flex';
   document.getElementById('user-name-disp').textContent=currentUser.nickname+' さん';
   document.getElementById('user-avatar').textContent=currentUser.nickname[0];
-  renderCats();
   await loadEvent();
   showScreen('screen-home');
 }
@@ -724,8 +730,15 @@ async function loadEvent(){
 }
 
 function applyFixedLevel(level){
+  const lvArea=document.getElementById('lv-area');
   const lvBtns=document.getElementById('lv-row').querySelectorAll('.lv');
-  if(level==='all'){lvBtns.forEach(b=>b.classList.remove('disabled'));return}
+  if(!level||level==='all'){
+    selectedLevel='all';
+    lvArea.style.display='none';
+    return;
+  }
+  // fixed_levelがある場合のみレベルUIを表示
+  lvArea.style.display='block';
   lvBtns.forEach(b=>{
     b.classList.remove('sel','disabled');
     if(b.dataset.lv===level){b.classList.add('sel');selectedLevel=level;}
@@ -830,27 +843,70 @@ async function startDrill(){
     const url=`/rest/v1/questions?status=eq.active&limit=200&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`;
     const res=await api(url);
     let data=await res.json();
-    if(selectedCat!=='all')data=data.filter(q=>q.category===selectedCat);
     if(selectedLevel!=='all'){
       data=data.filter(q=>selectedLevel==='easy'?q.irt_b<=-0.5:selectedLevel==='mid'?q.irt_b>-0.5&&q.irt_b<=0.5:q.irt_b>0.5);
     }
     if(data.length===0){showError('条件に合う問題が見つかりませんでした');showLoading(false);return}
+    // プールをシャッフル（ランダム性を加えつつFisher情報量で選択）
     data.sort(()=>Math.random()-0.5);
-    questions=data.slice(0,DRILL_SIZE);
+    questionPool=data;
+    questions=[];
     currentIdx=0;correctCount=0;totalAnswered=0;sessionPoints=0;
+    se=1.0; // SE初期値
+    // 最初の問題をFisher情報量最大で選択
+    pickNextQuestion();
     showLoading(false);
     showScreen('screen-drill');
     renderQuestion();
   }catch(e){showError('問題の取得に失敗しました');showLoading(false)}
 }
 
+// Fisher情報量が最大の問題を選ぶ
+function pickNextQuestion(){
+  const answered_ids=new Set(questions.map(q=>q.id));
+  const remaining=questionPool.filter(q=>!answered_ids.has(q.id));
+  if(remaining.length===0)return null;
+  // Fisher情報量 = 1.7² × a² × P(1-P)
+  let best=null,bestInfo=-1;
+  for(const q of remaining){
+    const p=1/(1+Math.exp(-1.7*q.irt_a*(theta-q.irt_b)));
+    const info=1.7*1.7*q.irt_a*q.irt_a*p*(1-p);
+    // ランダム性を少し加えて同じ問題ばかり出ないように
+    const score=info*(0.8+Math.random()*0.4);
+    if(score>bestInfo){bestInfo=score;best=q;}
+  }
+  if(best)questions.push(best);
+  return best;
+}
+
+// SEを計算（回答済み問題のFisher情報量の合計の平方根の逆数）
+function calcSE(){
+  let totalInfo=0;
+  for(const q of questions.slice(0,totalAnswered)){
+    const p=1/(1+Math.exp(-1.7*q.irt_a*(theta-q.irt_b)));
+    totalInfo+=1.7*1.7*q.irt_a*q.irt_a*p*(1-p);
+  }
+  return totalInfo>0?1/Math.sqrt(totalInfo):1.0;
+}
+
+// ドリル終了判定
+function shouldFinish(){
+  if(totalAnswered<DRILL_MIN)return false; // 最低問題数に達していない
+  if(totalAnswered>=DRILL_MAX)return true;  // 最大問題数に達した
+  se=calcSE();
+  return se<=SE_THRESHOLD; // SE閾値を下回ったら終了
+}
+
 function renderQuestion(){
   const q=questions[currentIdx];
   answered=false;
-  const pct=Math.round(currentIdx/questions.length*100);
-  document.getElementById('progress-text').textContent=`${currentIdx+1} / ${questions.length}問`;
-  document.getElementById('progress-pct').textContent=pct+'%';
-  document.getElementById('progress-fill').style.width=pct+'%';
+  // SEベースのプログレス：SE 1.0→0.35 を 0%→100% にマッピング
+  const seProgress=Math.min(100,Math.round((1.0-se)/(1.0-SE_THRESHOLD)*100));
+  const seLabel=totalAnswered===0?'理解度を測定中...':`SE: ${se.toFixed(2)}（あと少し！）`;
+  document.getElementById('progress-text').textContent=`${currentIdx+1}問目`;
+  document.getElementById('progress-pct').textContent=
+    totalAnswered>=DRILL_MIN&&se<=SE_THRESHOLD+0.1?'もうすぐ完了！':seLabel;
+  document.getElementById('progress-fill').style.width=seProgress+'%';
   document.getElementById('q-num').textContent=`Q${currentIdx+1}`;
   document.getElementById('cat-badge').textContent=q.category;
   document.getElementById('diff-badge').textContent=diffLabel(q.irt_b);
@@ -938,15 +994,23 @@ function selectAnswer(idx,q){
       theta_at_answer:parseFloat(theta.toFixed(3)),points_earned:pts
     })}).catch(e=>console.error(e));
   }
+  // SE再計算して終了判定
+  se=calcSE();
   const bn=document.getElementById('btn-next');
   bn.style.display='block';
-  bn.textContent=currentIdx+1>=questions.length?'結果を見る':'次の問題 →';
+  bn.textContent=shouldFinish()?'結果を見る':'次の問題 →';
 }
 
 async function nextQuestion(){
+  if(shouldFinish()){
+    await saveSession();
+    showResult();
+    return;
+  }
+  // 次の問題をFisher情報量最大で選択
+  pickNextQuestion();
   currentIdx++;
-  if(currentIdx>=questions.length){await saveSession();showResult();}
-  else renderQuestion();
+  renderQuestion();
 }
 
 async function saveSession(){
@@ -982,12 +1046,12 @@ async function saveSession(){
 
 function showResult(){
   const pct=Math.round(correctCount/totalAnswered*100);
-  document.getElementById('res-correct').textContent=correctCount;
+  document.getElementById('res-correct').textContent=`${correctCount}/${totalAnswered}`;
   document.getElementById('res-pct').textContent=pct+'%';
   document.getElementById('res-theta').textContent=theta.toFixed(2);
   document.getElementById('result-score').textContent='+'+sessionPoints;
   const comment=pct>=80?'すばらしい！':pct>=60?'まずまずです。':'もう少し練習しましょう。';
-  document.getElementById('result-sub').textContent=`正答率 ${pct}%　${comment}`;
+  document.getElementById('result-sub').textContent=`${totalAnswered}問回答・正答率 ${pct}%　${comment}`;
   showScreen('screen-result');
 }
 
