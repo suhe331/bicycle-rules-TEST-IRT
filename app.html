@@ -821,6 +821,8 @@ const SUPABASE_URL='https://hwxreikopltisfoimuzf.supabase.co';
 const SUPABASE_KEY='sb_publishable_IibWbT-1J9MeXGN5XkJfMw_PqsRfgsi';
 
 // ── SE設定 ──
+const KIDS_MODE = new URLSearchParams(location.search).get("mode")==="kids";
+const QSTATUS = KIDS_MODE ? "kids" : "active";
 const SE_THRESHOLD = 0.40;
 const DRILL_MIN = 3;
 
@@ -1383,10 +1385,10 @@ async function startDrill(){
       // 復習モード：不正解問題を優先
       if(wrongQuestionIds.length===0){showError('まちがえた問題がありません。通常ドリルで練習しよう！');showLoading(false);return;}
       const ids=wrongQuestionIds.slice(0,20).join(',');
-      const res=await api(`/rest/v1/questions?id=in.(${ids})&status=eq.active&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`);
+      const res=await api(`/rest/v1/questions?id=in.(${ids})&status=eq.${QSTATUS}&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`);
       data=await res.json();
     }else{
-      const url=`/rest/v1/questions?status=eq.active&limit=200&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`;
+      const url=`/rest/v1/questions?status=eq.${QSTATUS}&limit=200&select=id,question_text,choices,correct_index,explanation,law_ref,irt_a,irt_b,category,photo_url,location_tag,tags`;
       const res=await api(url);
       data=await res.json();
       if(selectedLevel!=='all'){
